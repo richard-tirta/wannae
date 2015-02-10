@@ -1,0 +1,91 @@
+
+
+@mixin large {
+	@media (min-width: 1201px) { @content; }
+}
+
+@mixin medium {
+	@media (max-width: 1200px) { @content; }
+}
+
+@mixin small {
+	@media (max-width: 750px) { @content; }
+}
+
+//default is small
+
+@mixin xsmall {
+	@media (max-width: 500px) { @content; }
+}
+
+@mixin short {
+	@media (max-height: 500px) { @content; }
+}
+
+@mixin xshort {
+	@media (max-height: 400px) { @content; }
+}
+
+
+$dark-gray: rgb(65, 65, 65);
+$teal: rgb(22, 255, 221);
+
+@mixin clearfix {
+	&:after {
+		content: "";
+		clear: both;
+		display: block;
+	}
+}
+
+@mixin margin-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@mixin absolute-center {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@mixin transition-cubic {
+	transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+@mixin transition-quad {
+	transition: all 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@mixin hide-show {
+	transition: opacity 500ms ease, visibility 500ms ease;
+	opacity: 1;
+	visibility: visible;
+	&.hidden {
+		opacity: 0;
+		visibility: hidden;
+		z-index: -10;
+	}
+}
+
+@mixin tab-module {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	min-width: 320px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	@include small {
+		position: relative;
+		top: auto;
+		left: auto;
+		right: auto;
+		bottom: auto;
+	}
+}
+

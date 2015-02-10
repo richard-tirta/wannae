@@ -1,0 +1,122 @@
+//========= TYPOGRAPHY ==========//
+
+$base: 14; // Default
+
+@function em($pixels, $context: $base) {
+  @return #{$pixels/$context}em
+}
+
+
+html{
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-size-adjust: none;
+	text-rendering: optimizelegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	-ms-font-smoothing: antialiased;
+	-o-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+
+body {
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	letter-spacing: 0.1em;
+}
+
+a {
+	color: white;
+	text-decoration: none;
+}
+
+h1, h2, h3, h4, h5 {
+	margin: 0;
+}
+
+h1 {
+	font-size: em(24);
+	letter-spacing: 0.09em;
+	font-weight: normal;
+	line-height: 16px;
+	@include medium {
+		font-size: em(22);
+		line-height: 1.1;
+	}
+	@include small {
+		font-size: em(18);
+	}
+}
+
+h2 {
+	font-size: em(15);
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-weight: normal;
+	letter-spacing: 0.08em;
+	line-height: 1.2;
+	@include short {
+		font-size: em(12);
+	}
+	@include xshort {
+		font-size: em(12);
+	}
+	@include medium {
+		font-size: em(22);
+	}
+}
+
+h3 {
+	font-size: em(16);
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-weight: bold;
+	letter-spacing: 0.01em;
+}
+
+h4 {
+	font-size: em(18);
+	font-weight: normal;
+	line-height: 1.1;
+	margin: 5px 0;
+	@include xshort {
+		font-size: em(16);
+		margin: 0;
+	}
+}
+
+h5 {
+	font-size: em(26);
+	font-weight: normal;
+	line-height: 0.9;
+	letter-spacing: normal;
+}
+
+h6 {
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-size: em(30);
+	font-weight: normal;
+	line-height: 1;
+	margin: 0;
+	letter-spacing: normal;
+}
+
+p {
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-size: em(14);
+	letter-spacing: normal;
+	line-height: 1.2;
+	margin: 0;
+	strong {
+		font-family:'Helvetica', Arial, sans-serif;
+		font-weight: normal;
+	}
+}
+
+input {
+	font-family: 'Helvetica', Arial, sans-serif;
+	font-size: em(13);
+	letter-spacing: normal;
+}
+
+small {
+	font-size: em(12);
+}

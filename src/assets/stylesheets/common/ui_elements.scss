@@ -1,0 +1,140 @@
+//========= UI ELEMENTS==========//
+
+
+@mixin background-icon($imagePath){
+	background-image: image-url($imagePath);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	display: block;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+
+
+@mixin background($imagePath){
+	background-image: image-url($imagePath);
+	background-repeat: no-repeat;
+	background-position: 50% 0;
+	background-size: 100% 100%;
+	display: block;
+	overflow: hidden;
+}
+
+ul {
+	padding: 0;
+}
+
+li {
+	list-style: none;
+	margin: 10px 0;
+}
+
+// Snippet for background mixin use
+// Image path is already set in Gruntfile.js so you just need to put image name.
+
+// .your-image {
+// 	@include background-icon('your-image.jpg');
+// 	width: 200px;
+// 	height: 200px;
+// }
+
+
+.bg-header {
+	background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-large.jpg');
+	background-repeat: no-repeat;
+	background-position: center center, bottom right, center center;
+	background-size: 700px 250px, 320px 201px, cover;
+	@include medium {
+		background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-medium.jpg');
+		background-repeat: no-repeat;
+		background-position: center center, bottom right, center center;
+		background-size: 700px 250px, 270px 170px, cover;
+	}
+	@include small {
+		background-image: image-url('bg-birds.png'), image-url('header-bg-small.jpg');
+		background-repeat: no-repeat;
+		background-position: center center, center center;
+		background-size: 700px 250px, cover;
+	}
+}
+
+.bg-walls {
+	@include background('img-walls.png');
+	background-repeat: repeat-x;
+	background-size: 48px 80px;
+}
+
+.logo-wannae {
+	@include background-icon('logo-wannae.png');
+	width: 150px;
+	height: 150px;
+}
+
+.icon-fb {
+	@include background-icon('icon-fb.png');
+	width: 23px;
+	height: 23px;
+}
+
+.icon-tw {
+	@include background-icon('icon-tw.png');
+	width: 23px;
+	height: 23px;
+}
+
+.icon-em {
+	@include background-icon('icon-email.png');
+	width: 23px;
+	height: 23px;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid $dark-gray;
+	display: block;
+}
+
+.sharing {
+	width: 100%;
+	height: 50px;
+	margin-top: 30px;
+	.social-share {
+		display: inline-block;
+		margin: 0 10px;
+	}
+}
+
+
+//========= G MAP==========//
+
+.gm-style-iw {
+}
+
+.gm-style-iw * {
+	display: block;
+	width: 100%;
+	text-align: left;
+}
+.gm-style-iw h6, .gm-style-iw p {
+	margin: 0;
+	padding: 0;
+}
+.gm-style-iw a {
+	color: black;
+}
+
+.map-direction-link {
+	background: $teal;
+	width: 100%;
+	margin-top: 5px;
+	padding-top: 5px;
+	height: 25px;
+	strong {
+		color: $dark-gray;
+		text-align: center;
+	}
+}
+
+//========= G MAP==========//
+
