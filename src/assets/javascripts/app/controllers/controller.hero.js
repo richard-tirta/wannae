@@ -1,14 +1,14 @@
 
 var CONTROLLER = CONTROLLER || {};
 
-CONTROLLER.MAIN = (function(window){
+CONTROLLER.HERO = (function(window){
 
-	var main = {};
+	var hero = {};
 
 
 	this.isTouch = undefined;
 
-	main.init = function() {
+	hero.init = function() {
 
 		var isTouch = true;
 
@@ -18,9 +18,9 @@ CONTROLLER.MAIN = (function(window){
 		      || (navigator.msMaxTouchPoints > 0));
 		}
 
-		main.isTouch = isTouchDevice();
+		hero.isTouch = isTouchDevice();
 	}
 
-	return main;
+	return hero;
 
 }(window));
