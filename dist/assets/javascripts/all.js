@@ -9295,6 +9295,33 @@ CONFIG.MENU.DESSERT = [
 		"description": "Homemade 2 layer coconut jelly"
 	}
 ];
+
+CONFIG.MENU.HERO = [
+	{
+		"id": 1,
+		"title": "Tea Leaf Salad",
+		"name": "tea-leaf-salad",
+		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+	},
+	{
+		"id": 2,
+		"title": "Not So Stinky Garlic Noodle",
+		"name": "not-so-stinky-garlic-noodle",
+		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
+	},
+	{
+		"id": 3,
+		"title": "Shiitake Noodle Soup",
+		"name": "shiitake-noodle-soup",
+		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
+	}
+	// {
+	// 	"id": 5,
+	// 	"title": "Golden Fried Rice w/ Pork Sung",
+	// 	"name": "golden-fried-rice-w-pork-sung",
+	// 	"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
+	// }
+];
 //	Note that Gruntfile is being setup so it loads vendor first, everything other than main.js and main.js at the very end.
 //  Therefore make sure you put your document.ready() or any initialization here 
 //  unless you use other kind of setup such as require.js or angularj.js
@@ -9306,6 +9333,8 @@ console.log("V1");
 document.addEventListener("DOMContentLoaded", function(event) { 
 
 	CONTROLLER.MAIN.init();
+	VIEW.HERO.init();
+	CONTROLLER.HERO.init();
 	//CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();
@@ -9356,5 +9385,123 @@ CONTROLLER.MAIN = (function(window){
 	}
 
 	return main;
+
+}(window));
+
+var CONTROLLER = CONTROLLER || {};
+
+CONTROLLER.HERO = (function(window){
+
+	var hero = {};
+
+	var heroIndex = 0;
+
+	this.prevSlideButton = undefined; 
+	this.nextSlideButton = undefined; 
+	this.slideModules = undefined; 
+	this.modulesLength = undefined;
+
+	this.isTouch = undefined;
+
+	hero.nextSlide = function() {
+		var currentNode = this.slideModules[heroIndex],
+			nextNode = this.slideModules[heroIndex + 1];
+
+		currentNode.className = "slide-module prev-slide-module";
+		nextNode.className = "slide-module current-slide-module";
+		
+		heroIndex++;
+	}
+
+	hero.prevSlide = function() {
+		var currentNode = this.slideModules[heroIndex],
+			prevNode = this.slideModules[heroIndex - 1];
+
+		currentNode.className = "slide-module next-slide-module";
+		prevNode.className = "slide-module current-slide-module";
+		
+		heroIndex--;
+	}
+
+	hero.slideInit = function() {
+		var touchStartX = undefined,
+			touchEndX = undefined;
+
+		this.prevSlideButton = document.getElementById("slide-left-button");
+		this.nextSlideButton = document.getElementById("slide-right-button");
+		this.slideModules = document.getElementsByClassName("slide-module");
+		this.slideEl = VIEW.HERO.slideEl;
+		this.modulesLength = this.slideModules.length;
+
+		function touchStart(e) {
+			touchStartX = e.changedTouches[0].clientX
+			e.preventDefault();
+		}
+
+		function touchEnd(e) {
+			touchEndX = e.changedTouches[0].clientX;
+			e.preventDefault();
+
+			if (touchStartX > touchEndX && heroIndex < hero.modulesLength - 1) {
+				hero.nextSlide();
+			} else if(touchStartX < touchEndX && heroIndex > 0) {
+				hero.prevSlide();
+			}
+		}
+
+
+		this.slideEl.addEventListener("touchstart", touchStart, false);
+		this.slideEl.addEventListener("touchend", touchEnd, false);
+
+	}
+
+	hero.init = function() {
+
+		var isTouch = true;
+
+		function isTouchDevice() {
+		 return (('ontouchstart' in window)
+		      || (navigator.MaxTouchPoints > 0)
+		      || (navigator.msMaxTouchPoints > 0));
+		}
+
+		hero.isTouch = isTouchDevice();
+	}
+
+	return hero;
+
+}(window));
+
+var VIEW = VIEW || {};
+
+VIEW.HERO = (function(window){
+
+	var hero = {};
+
+	this.slideEl = undefined;
+
+	hero.slideTemplate = function() {
+
+		var menu = CONFIG.MENU.HERO;
+
+		this.slideEl = document.getElementById('hero-slide__container');
+
+		this.slideEl.innerHTML = '';
+		
+		for (i = 0; i < menu.length; i++) {
+			hero.slideEl.innerHTML = hero.slideEl.innerHTML + '<div class="slide-module current-slide-module">' + 
+			'<img src="/assets/images/hero/' + menu[i].name + '.jpg" /></div>' +
+			menu[i].title + '</div>';
+		}
+
+		CONTROLLER.HERO.slideInit();
+	}
+
+
+	hero.init = function() {
+		hero.slideTemplate();
+	}
+
+	return hero;
 
 }(window));

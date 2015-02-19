@@ -9,6 +9,8 @@ console.log("V1");
 document.addEventListener("DOMContentLoaded", function(event) { 
 
 	CONTROLLER.MAIN.init();
+	VIEW.HERO.init();
+	CONTROLLER.HERO.init();
 	//CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();

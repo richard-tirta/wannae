@@ -89,3 +89,30 @@ CONFIG.MENU.DESSERT = [
 		"description": "Homemade 2 layer coconut jelly"
 	}
 ];
+
+CONFIG.MENU.HERO = [
+	{
+		"id": 1,
+		"title": "Tea Leaf Salad",
+		"name": "tea-leaf-salad",
+		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+	},
+	{
+		"id": 2,
+		"title": "Not So Stinky Garlic Noodle",
+		"name": "not-so-stinky-garlic-noodle",
+		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
+	},
+	{
+		"id": 3,
+		"title": "Shiitake Noodle Soup",
+		"name": "shiitake-noodle-soup",
+		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
+	}
+	// {
+	// 	"id": 5,
+	// 	"title": "Golden Fried Rice w/ Pork Sung",
+	// 	"name": "golden-fried-rice-w-pork-sung",
+	// 	"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
+	// }
+];
