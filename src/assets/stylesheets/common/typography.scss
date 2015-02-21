@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-	font-size: em(24);
+	font-size: em(18);
 	letter-spacing: 0.09em;
 	font-weight: normal;
 	line-height: 16px;
@@ -43,8 +43,8 @@ h1 {
 		font-size: em(22);
 		line-height: 1.1;
 	}
-	@include small {
-		font-size: em(18);
+	@include large {
+		font-size: em(24);
 	}
 }
 

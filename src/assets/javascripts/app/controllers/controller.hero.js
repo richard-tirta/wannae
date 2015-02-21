@@ -36,7 +36,9 @@ CONTROLLER.HERO = (function(window){
 
 	hero.slideInit = function() {
 		var touchStartX = undefined,
-			touchEndX = undefined;
+			touchEndX = undefined,
+			autoNext = true,
+			timer = 2;
 
 		this.prevSlideButton = document.getElementById("slide-left-button");
 		this.nextSlideButton = document.getElementById("slide-right-button");
@@ -44,9 +46,29 @@ CONTROLLER.HERO = (function(window){
 		this.slideEl = VIEW.HERO.slideEl;
 		this.modulesLength = this.slideModules.length;
 
+		function autoSlide() {
+			if (timer < 1) {
+
+				if (heroIndex === hero.modulesLength - 1) {
+					autoNext = false;
+				} else if ( heroIndex === 0) {
+					autoNext = true;
+				}
+
+				if(autoNext) {
+					hero.nextSlide();
+				} else {
+					hero.prevSlide();
+				}
+
+				timer = 2;
+			}
+		}
+
 		function touchStart(e) {
 			touchStartX = e.changedTouches[0].clientX
 			e.preventDefault();
+			timer = 2;
 		}
 
 		function touchEnd(e) {
@@ -58,11 +80,36 @@ CONTROLLER.HERO = (function(window){
 			} else if(touchStartX < touchEndX && heroIndex > 0) {
 				hero.prevSlide();
 			}
+			timer = 2;
 		}
 
 
 		this.slideEl.addEventListener("touchstart", touchStart, false);
 		this.slideEl.addEventListener("touchend", touchEnd, false);
+
+		this.prevSlideButton.addEventListener("click", function(e) {
+			e.preventDefault();
+			if (heroIndex > 0) {
+				hero.prevSlide();
+			}
+			timer = 2;
+		}, false);
+
+		this.nextSlideButton.addEventListener("click", function(e) {
+			e.preventDefault();
+			if (heroIndex < hero.modulesLength - 1) {
+				hero.nextSlide();
+			}
+			timer = 2;
+		}, false);
+
+		this.slideModules[0].className = "slide-module current-slide-module";
+
+		setInterval(function(){ 
+			autoSlide();
+			timer = timer - 1;
+
+		}, 5000);
 
 	}
 

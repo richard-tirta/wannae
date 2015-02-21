@@ -108,11 +108,11 @@ CONFIG.MENU.HERO = [
 		"title": "Shiitake Noodle Soup",
 		"name": "shiitake-noodle-soup",
 		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
+	},
+	{
+		"id": 4,
+		"title": "Golden Fried Rice w/ Pork Sung",
+		"name": "golden-fried-rice-w-pork-sung",
+		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}
-	// {
-	// 	"id": 5,
-	// 	"title": "Golden Fried Rice w/ Pork Sung",
-	// 	"name": "golden-fried-rice-w-pork-sung",
-	// 	"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
-	// }
 ];

@@ -5,11 +5,7 @@
 }
 
 @mixin medium {
-	@media (max-width: 1200px) { @content; }
-}
-
-@mixin small {
-	@media (max-width: 750px) { @content; }
+	@media (min-width: 750px) { @content; }
 }
 
 //default is small
@@ -71,21 +67,15 @@ $teal: rgb(22, 255, 221);
 }
 
 @mixin tab-module {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
+	position: relative;
 	margin: 0 auto;
 	min-width: 320px;
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	@include small {
-		position: relative;
-		top: auto;
-		left: auto;
-		right: auto;
-		bottom: auto;
+	@include medium {
+		position: fixed;
+		left: 0;
 	}
 }
 

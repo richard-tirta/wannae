@@ -41,21 +41,21 @@ li {
 
 
 .bg-header {
-	background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-large.jpg');
+	background-image: image-url('bg-birds.png'), image-url('header-bg-small.jpg');
 	background-repeat: no-repeat;
-	background-position: center center, bottom right, center center;
-	background-size: 700px 250px, 320px 201px, cover;
+	background-position: center center, center center;
+	background-size: 700px 250px, cover;
 	@include medium {
 		background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-medium.jpg');
 		background-repeat: no-repeat;
 		background-position: center center, bottom right, center center;
 		background-size: 700px 250px, 270px 170px, cover;
 	}
-	@include small {
-		background-image: image-url('bg-birds.png'), image-url('header-bg-small.jpg');
+	@include large {
+		background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-large.jpg');
 		background-repeat: no-repeat;
-		background-position: center center, center center;
-		background-size: 700px 250px, cover;
+		background-position: center center, bottom right, center center;
+		background-size: 700px 250px, 320px 201px, cover;
 	}
 }
 

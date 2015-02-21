@@ -9314,13 +9314,13 @@ CONFIG.MENU.HERO = [
 		"title": "Shiitake Noodle Soup",
 		"name": "shiitake-noodle-soup",
 		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
+	},
+	{
+		"id": 4,
+		"title": "Golden Fried Rice w/ Pork Sung",
+		"name": "golden-fried-rice-w-pork-sung",
+		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}
-	// {
-	// 	"id": 5,
-	// 	"title": "Golden Fried Rice w/ Pork Sung",
-	// 	"name": "golden-fried-rice-w-pork-sung",
-	// 	"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
-	// }
 ];
 //	Note that Gruntfile is being setup so it loads vendor first, everything other than main.js and main.js at the very end.
 //  Therefore make sure you put your document.ready() or any initialization here 
@@ -9425,7 +9425,9 @@ CONTROLLER.HERO = (function(window){
 
 	hero.slideInit = function() {
 		var touchStartX = undefined,
-			touchEndX = undefined;
+			touchEndX = undefined,
+			autoNext = true,
+			timer = 2;
 
 		this.prevSlideButton = document.getElementById("slide-left-button");
 		this.nextSlideButton = document.getElementById("slide-right-button");
@@ -9433,9 +9435,29 @@ CONTROLLER.HERO = (function(window){
 		this.slideEl = VIEW.HERO.slideEl;
 		this.modulesLength = this.slideModules.length;
 
+		function autoSlide() {
+			if (timer < 1) {
+
+				if (heroIndex === hero.modulesLength - 1) {
+					autoNext = false;
+				} else if ( heroIndex === 0) {
+					autoNext = true;
+				}
+
+				if(autoNext) {
+					hero.nextSlide();
+				} else {
+					hero.prevSlide();
+				}
+
+				timer = 2;
+			}
+		}
+
 		function touchStart(e) {
 			touchStartX = e.changedTouches[0].clientX
 			e.preventDefault();
+			timer = 2;
 		}
 
 		function touchEnd(e) {
@@ -9447,11 +9469,36 @@ CONTROLLER.HERO = (function(window){
 			} else if(touchStartX < touchEndX && heroIndex > 0) {
 				hero.prevSlide();
 			}
+			timer = 2;
 		}
 
 
 		this.slideEl.addEventListener("touchstart", touchStart, false);
 		this.slideEl.addEventListener("touchend", touchEnd, false);
+
+		this.prevSlideButton.addEventListener("click", function(e) {
+			e.preventDefault();
+			if (heroIndex > 0) {
+				hero.prevSlide();
+			}
+			timer = 2;
+		}, false);
+
+		this.nextSlideButton.addEventListener("click", function(e) {
+			e.preventDefault();
+			if (heroIndex < hero.modulesLength - 1) {
+				hero.nextSlide();
+			}
+			timer = 2;
+		}, false);
+
+		this.slideModules[0].className = "slide-module current-slide-module";
+
+		setInterval(function(){ 
+			autoSlide();
+			timer = timer - 1;
+
+		}, 5000);
 
 	}
 
@@ -9484,14 +9531,14 @@ VIEW.HERO = (function(window){
 
 		var menu = CONFIG.MENU.HERO;
 
-		this.slideEl = document.getElementById('hero-slide__container');
+		this.slideEl = document.getElementById('hero-slide');
 
 		this.slideEl.innerHTML = '';
 		
 		for (i = 0; i < menu.length; i++) {
-			hero.slideEl.innerHTML = hero.slideEl.innerHTML + '<div class="slide-module current-slide-module">' + 
-			'<img src="/assets/images/hero/' + menu[i].name + '.jpg" /></div>' +
-			menu[i].title + '</div>';
+			hero.slideEl.innerHTML = hero.slideEl.innerHTML + '<div class="slide-module next-slide-module">' + 
+			'<div class="menu-image ' + menu[i].name + '"></div><div class="module-text"><h3>' + 
+			menu[i].title + '</h3><p>' + menu[i].description + '</p></div></div>';
 		}
 
 		CONTROLLER.HERO.slideInit();

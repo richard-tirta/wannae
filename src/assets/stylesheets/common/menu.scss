@@ -1,0 +1,44 @@
+
+
+@mixin menu-background($imagePath){
+	background-image: image-url($imagePath);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: cover;
+	display: block;
+	overflow: hidden;
+}
+
+
+//========= HERO ==========//
+
+.tea-leaf-salad {
+	@include menu-background('hero/tea-leaf-salad-s.jpg');
+	@include medium {
+		@include menu-background('hero/tea-leaf-salad-l.jpg');
+	}
+}
+
+.not-so-stinky-garlic-noodle {
+	@include menu-background('hero/not-so-stinky-garlic-noodle-s.jpg');
+	@include medium {
+		@include menu-background('hero/not-so-stinky-garlic-noodle-l.jpg');
+	}
+}
+
+.shiitake-noodle-soup {
+	@include menu-background('hero/shiitake-noodle-soup-s.jpg');
+	@include medium {
+		@include menu-background('hero/shiitake-noodle-soup-l.jpg');
+		background-position: 50% top;
+	}
+}
+
+
+.golden-fried-rice-w-pork-sung {
+	@include menu-background('hero/golden-fried-rice-w-pork-sung-s.jpg');
+	@include medium {
+		@include menu-background('hero/golden-fried-rice-w-pork-sung-l.jpg');
+		background-position: 50% top;
+	}
+}
