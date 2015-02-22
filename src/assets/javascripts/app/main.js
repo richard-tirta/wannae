@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	CONTROLLER.MAIN.init();
 	VIEW.HERO.init();
 	CONTROLLER.HERO.init();
+	VIEW.MENU.init();
 	//CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();

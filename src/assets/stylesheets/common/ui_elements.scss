@@ -89,6 +89,18 @@ li {
 	height: 23px;
 }
 
+.icon-arrow-left {
+	@include background-icon('icon-arrow-left.png');
+	width: 30px;
+	height: 30px;
+}
+
+.icon-arrow-right {
+	@include background-icon('icon-arrow-right.png');
+	width: 30px;
+	height: 30px;
+}
+
 hr {
 	border: 0;
 	border-top: 1px solid $dark-gray;

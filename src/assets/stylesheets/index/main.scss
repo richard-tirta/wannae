@@ -1,69 +1,3 @@
-
-html, body{
-	background: $dark-gray;
-	color: white;
-	width: 100%;
-	min-width: 320px;
-	height: 100%;
-	margin: 0 auto;
-	padding: 0;
-	&.noscroll {
-		overflow: hidden;
-	}
-}
-
-header {
-	@extend .bg-header;
-	@include tab-module;
-	height: 200px;
-	z-index: 10;
-	@include medium {
-		top: 0;
-	}
-	.logo-wannae {
-		margin: 25px auto;
-		@include medium {
-			margin: 10px auto;
-		}
-	}
-	.socials {
-		position: absolute;
-		top: 0;
-		right: 10px;
-		.social-icon {
-			display: inline-block;
-			margin: 10px 5px; 
-		}
-	}
-}
-
-nav {
-	@extend .bg-walls;
-	@include tab-module;
-	font-family: 'Lobster', cursive;
-	color: $dark-gray;
-	height: 32px;
-	margin-top: -25px;
-	padding-top: 33px;
-	text-align: center;
-	z-index: 11;
-	@include medium {
-		margin-top: 0;
-		top: 175px;
-	}
-}
-
-.section {
-	width: 100%;
-	height: 100%;
-	height: calc(100% - 240px);
-	overflow: hidden;
-	position: relative;
-	@include medium {
-		height: calc(100% - 285px);
-	}
-}
-
 .section-hero {
 	width: 100%;
 	@include medium {
@@ -90,7 +24,7 @@ nav {
 			left: 0;
 			bottom: 0;
 			height : 70px;
-			padding: 10px 0 0 20px;
+			padding: 10px 0 5px 20px;
 			width: 100%;
 			z-index: 10;
 			p {
@@ -118,80 +52,138 @@ nav {
 		color: white;
 		font-weight: bold;
 		top: 40%;
-		z-index: 11;
-		&#slide-left-button {
-			left: 1%;
+		opacity: 0.8;
+		z-index: 9;
+		&:hover {
+			opacity: 1;
 		}
-		&#slide-right-button {
-			right: 1%;
+		&.icon-arrow-left {
+			left: 0.5%;
+		}
+		&.icon-arrow-right {
+			right: 0.5%;
 		}
 	}
 }
 
-// .section-hero {
-// 	.hero-slide {
-// 		width: 100%;
-// 		height: 100%;
-// 	}
-// 	.hero-slide__container {
-// 		position: relative;
-// 		width: 100%;
-// 		height: 100%;
-// 	}
-// 	.slide-module {
-// 		position: relative;
-// 		width: 100%;
-// 		height: 100%;
-// 		img {
-// 			position: absolute;
-// 			top: 20%;
-// 			left: 0;
-// 			right: 0;
-// 			margin: auto;
-// 			width: 100%;
-// 		}
-// 	}
-// 	.hero-description {
-// 		background: rgba(0,0,0,0.5);
-// 		position: absolute;
-// 		bottom:  45px;
-// 		left: 0;
-// 		padding-top: 10px;
-// 		padding-left: 20px;
-// 		width: 100%;
-// 		width: calc(100% - 20px);
-// 		height: 70px;
-// 		@include small {
-// 			bottom: 0;
-// 		}
-// 		p {
-// 			width: 300px;
-// 			margin-top: 8px;
-// 		}
-// 	}
-// }
-
-footer {
+.section-menu {
 	@include clearfix;
-	background: $dark-gray;
-	@include tab-module;
-	top: auto;
-	bottom: 0;
-	height: 110px;
-	text-align: left;
-	z-index: 10;
+	height: auto;
+	padding-bottom: 20px;
 	@include medium {
-		height: 45px;
+		height: 500px;
 	}
-	.footer-text {
+	@include large {
+		height: 650px;
+	}
+	h2 {
+		border-top: 1px solid rgba(230,230,230,0.5);
+		border-bottom: 1px solid rgba(230,230,230,0.5);
+		color: rgb(230,230,230);
+		min-height: 40px;
+		height: 6%;
+		padding-top: 6%;
+		text-align: center;
+		@include medium {
+			padding-top: 1%;
+		}
+	}
+	.menu-container {
+		max-width: 1670px;
+		height: 100%;
+	}
+	.appetizer-module {
+		background: rgb(50,50,50);
 		float: left;
-		margin-top: 5px;
-		margin-left: 20px;
-		&:last-child {
+		position: relative;
+		padding-bottom: 20px;
+		width: 100%;
+		&:nth-child(even) {
+			background: rgb(40,40,40);
+		}
+		@include medium {
+			width: 20%;
+			height: 100%;
+		}
+		img {
+			width: 100%;
+		}
+		.module-text {
+			padding: 5px 10px 0 10px;
+		}
+	}
+	&.section-dessert{
+		.menu-dessert {
 			@include medium {
-				border-left: 1px solid rgba(150,150,150, 0.3);
-				padding-left: 25px;
+				width: 60%;
+				margin: 0 auto;
 			}
+			.appetizer-module {
+				@include medium {
+					width: 33.3%;
+				}
+			}
+		}
+	}
+}
+
+.section-about {
+	background: rgba(0,0,0,0.9);
+	min-height: 100%;
+	min-height: calc(100% - 240px);
+	height: auto;
+	padding-bottom: 50px;
+	&:after {
+		background: image-url('hero/tea-leaf-salad-s.jpg');
+		background-repeat: no-repeat;
+		background-size: 120% auto;
+		background-position: 0 50%;
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+	}
+	h2 {
+		border-top: 1px solid rgba(230,230,230,0.5);
+		border-bottom: 1px solid rgba(230,230,230,0.5);
+		color: rgb(230,230,230);
+		min-height: 40px;
+		height: 6%;
+		padding-top: 6%;
+		text-align: center;
+		@include medium {
+			padding-top: 1%;
+		}
+	}
+	.content {
+		@include clearfix;
+		@include medium {
+			width: 700px;
+			margin: 50px auto;
+		} 
+	}
+	.description {
+		width: 300px;
+		margin: 0 auto;
+		@include medium {
+			float: left;
+		}
+		p {
+			line-height: 1.3;
+			margin-top: 15px;
+		}
+	}
+	h1 {
+		width: 300px;
+		margin: 0 auto;
+		margin-top: 30px;
+		@include medium {
+			float: left;
+			margin-top: 100px;
+			margin-left: 100px;
 		}
 	}
 }
