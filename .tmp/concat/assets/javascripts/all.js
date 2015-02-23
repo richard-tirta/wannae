@@ -10046,10 +10046,12 @@ CONTROLLER.SCROLL = (function(window){
 
 		if (sectionIndex === 0) {
 			VIEW.SCROLL.onScroll(1);
+			VIEW.SCROLL.updateNav(1);
 			//VIEW.SCROLL.logoMini(true);
 			sectionIndex++;
 		} else if (sectionIndex > 0 && sectionIndex < this.mainSectionLength - 1) {
 			VIEW.SCROLL.onScroll(sectionIndex + 1);
+			VIEW.SCROLL.updateNav(sectionIndex + 1);
 			sectionIndex++;
 		}
 	}
@@ -10062,6 +10064,7 @@ CONTROLLER.SCROLL = (function(window){
 
 		if (sectionIndex > 0) {
 			VIEW.SCROLL.onScroll(sectionIndex - 1);
+			VIEW.SCROLL.updateNav(sectionIndex - 1);
 			sectionIndex--;
 		}
 	}
@@ -10196,12 +10199,14 @@ CONTROLLER.SCROLL = (function(window){
 				var id = this.getAttribute("data-id");
 				VIEW.SCROLL.onScroll(id);
 				VIEW.SCROLL.updateNav(id);
+				sectionIndex = id;
 			}, false);
 		}
 
 		this.logoButton.addEventListener("click", function(e) {
 			VIEW.SCROLL.onScroll(0);
 			VIEW.SCROLL.updateNav(0);
+			sectionIndex = 0;
 		}, false);
 
 	}
