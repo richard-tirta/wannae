@@ -9204,6 +9204,477 @@ return jQuery;
 
 }));
 
+/*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
+ * Licensed under the MIT License (LICENSE.txt).
+ *
+ * Version: 3.1.9
+ *
+ * Requires: jQuery 1.2.2+
+ */
+
+(function (factory) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS style for Browserify
+        module.exports = factory;
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
+
+    var toFix  = ['wheel', 'mousewheel', 'DOMMouseScroll', 'MozMousePixelScroll'],
+        toBind = ( 'onwheel' in document || document.documentMode >= 9 ) ?
+                    ['wheel'] : ['mousewheel', 'DomMouseScroll', 'MozMousePixelScroll'],
+        slice  = Array.prototype.slice,
+        nullLowestDeltaTimeout, lowestDelta;
+
+    if ( $.event.fixHooks ) {
+        for ( var i = toFix.length; i; ) {
+            $.event.fixHooks[ toFix[--i] ] = $.event.mouseHooks;
+        }
+    }
+
+    var special = $.event.special.mousewheel = {
+        version: '3.1.9',
+
+        setup: function() {
+            if ( this.addEventListener ) {
+                for ( var i = toBind.length; i; ) {
+                    this.addEventListener( toBind[--i], handler, false );
+                }
+            } else {
+                this.onmousewheel = handler;
+            }
+            // Store the line height and page height for this particular element
+            $.data(this, 'mousewheel-line-height', special.getLineHeight(this));
+            $.data(this, 'mousewheel-page-height', special.getPageHeight(this));
+        },
+
+        teardown: function() {
+            if ( this.removeEventListener ) {
+                for ( var i = toBind.length; i; ) {
+                    this.removeEventListener( toBind[--i], handler, false );
+                }
+            } else {
+                this.onmousewheel = null;
+            }
+        },
+
+        getLineHeight: function(elem) {
+            return parseInt($(elem)['offsetParent' in $.fn ? 'offsetParent' : 'parent']().css('fontSize'), 10);
+        },
+
+        getPageHeight: function(elem) {
+            return $(elem).height();
+        },
+
+        settings: {
+            adjustOldDeltas: true
+        }
+    };
+
+    $.fn.extend({
+        mousewheel: function(fn) {
+            return fn ? this.bind('mousewheel', fn) : this.trigger('mousewheel');
+        },
+
+        unmousewheel: function(fn) {
+            return this.unbind('mousewheel', fn);
+        }
+    });
+
+
+    function handler(event) {
+        var orgEvent   = event || window.event,
+            args       = slice.call(arguments, 1),
+            delta      = 0,
+            deltaX     = 0,
+            deltaY     = 0,
+            absDelta   = 0;
+        event = $.event.fix(orgEvent);
+        event.type = 'mousewheel';
+
+        // Old school scrollwheel delta
+        if ( 'detail'      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
+        if ( 'wheelDelta'  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
+        if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
+        if ( 'wheelDeltaX' in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
+
+        // Firefox < 17 horizontal scrolling related to DOMMouseScroll event
+        if ( 'axis' in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
+            deltaX = deltaY * -1;
+            deltaY = 0;
+        }
+
+        // Set delta to be deltaY or deltaX if deltaY is 0 for backwards compatabilitiy
+        delta = deltaY === 0 ? deltaX : deltaY;
+
+        // New school wheel delta (wheel event)
+        if ( 'deltaY' in orgEvent ) {
+            deltaY = orgEvent.deltaY * -1;
+            delta  = deltaY;
+        }
+        if ( 'deltaX' in orgEvent ) {
+            deltaX = orgEvent.deltaX;
+            if ( deltaY === 0 ) { delta  = deltaX * -1; }
+        }
+
+        // No change actually happened, no reason to go any further
+        if ( deltaY === 0 && deltaX === 0 ) { return; }
+
+        // Need to convert lines and pages to pixels if we aren't already in pixels
+        // There are three delta modes:
+        //   * deltaMode 0 is by pixels, nothing to do
+        //   * deltaMode 1 is by lines
+        //   * deltaMode 2 is by pages
+        if ( orgEvent.deltaMode === 1 ) {
+            var lineHeight = $.data(this, 'mousewheel-line-height');
+            delta  *= lineHeight;
+            deltaY *= lineHeight;
+            deltaX *= lineHeight;
+        } else if ( orgEvent.deltaMode === 2 ) {
+            var pageHeight = $.data(this, 'mousewheel-page-height');
+            delta  *= pageHeight;
+            deltaY *= pageHeight;
+            deltaX *= pageHeight;
+        }
+
+        // Store lowest absolute delta to normalize the delta values
+        absDelta = Math.max( Math.abs(deltaY), Math.abs(deltaX) );
+
+        if ( !lowestDelta || absDelta < lowestDelta ) {
+            lowestDelta = absDelta;
+
+            // Adjust older deltas if necessary
+            if ( shouldAdjustOldDeltas(orgEvent, absDelta) ) {
+                lowestDelta /= 40;
+            }
+        }
+
+        // Adjust older deltas if necessary
+        if ( shouldAdjustOldDeltas(orgEvent, absDelta) ) {
+            // Divide all the things by 40!
+            delta  /= 40;
+            deltaX /= 40;
+            deltaY /= 40;
+        }
+
+        // Get a whole, normalized value for the deltas
+        delta  = Math[ delta  >= 1 ? 'floor' : 'ceil' ](delta  / lowestDelta);
+        deltaX = Math[ deltaX >= 1 ? 'floor' : 'ceil' ](deltaX / lowestDelta);
+        deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
+
+        // Add information to the event object
+        event.deltaX = deltaX;
+        event.deltaY = deltaY;
+        event.deltaFactor = lowestDelta;
+        // Go ahead and set deltaMode to 0 since we converted to pixels
+        // Although this is a little odd since we overwrite the deltaX/Y
+        // properties with normalized deltas.
+        event.deltaMode = 0;
+
+        // Add event and delta to the front of the arguments
+        args.unshift(event, delta, deltaX, deltaY);
+
+        // Clearout lowestDelta after sometime to better
+        // handle multiple device types that give different
+        // a different lowestDelta
+        // Ex: trackpad = 3 and mouse wheel = 120
+        if (nullLowestDeltaTimeout) { clearTimeout(nullLowestDeltaTimeout); }
+        nullLowestDeltaTimeout = setTimeout(nullLowestDelta, 200);
+
+        return ($.event.dispatch || $.event.handle).apply(this, args);
+    }
+
+    function nullLowestDelta() {
+        lowestDelta = null;
+    }
+
+    function shouldAdjustOldDeltas(orgEvent, absDelta) {
+        // If this is an older event and the delta is divisable by 120,
+        // then we are assuming that the browser is treating this as an
+        // older mouse wheel event and that we should divide the deltas
+        // by 40 to try and get a more usable deltaFactor.
+        // Side note, this actually impacts the reported scroll distance
+        // in older browsers and can cause scrolling to be slower than native.
+        // Turn this off by setting $.event.special.mousewheel.settings.adjustOldDeltas to false.
+        return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
+    }
+
+}));
+
+/*!
+ * jQuery Smooth Scroll - v1.5.4 - 2014-11-17
+ * https://github.com/kswedberg/jquery-smooth-scroll
+ * Copyright (c) 2014 Karl Swedberg
+ * Licensed MIT (https://github.com/kswedberg/jquery-smooth-scroll/blob/master/LICENSE-MIT)
+ */
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['jquery'], factory);
+  } else {
+    // Browser globals
+    factory(jQuery);
+  }
+}(function ($) {
+
+  var version = '1.5.4',
+      optionOverrides = {},
+      defaults = {
+        exclude: [],
+        excludeWithin:[],
+        offset: 0,
+
+        // one of 'top' or 'left'
+        direction: 'top',
+
+        // jQuery set of elements you wish to scroll (for $.smoothScroll).
+        //  if null (default), $('html, body').firstScrollable() is used.
+        scrollElement: null,
+
+        // only use if you want to override default behavior
+        scrollTarget: null,
+
+        // fn(opts) function to be called before scrolling occurs.
+        // `this` is the element(s) being scrolled
+        beforeScroll: function() {},
+
+        // fn(opts) function to be called after scrolling occurs.
+        // `this` is the triggering element
+        afterScroll: function() {},
+        easing: 'swing',
+        speed: 400,
+
+        // coefficient for "auto" speed
+        autoCoefficient: 2,
+
+        // $.fn.smoothScroll only: whether to prevent the default click action
+        preventDefault: true
+      },
+
+      getScrollable = function(opts) {
+        var scrollable = [],
+            scrolled = false,
+            dir = opts.dir && opts.dir === 'left' ? 'scrollLeft' : 'scrollTop';
+
+        this.each(function() {
+
+          if (this === document || this === window) { return; }
+          var el = $(this);
+          if ( el[dir]() > 0 ) {
+            scrollable.push(this);
+          } else {
+            // if scroll(Top|Left) === 0, nudge the element 1px and see if it moves
+            el[dir](1);
+            scrolled = el[dir]() > 0;
+            if ( scrolled ) {
+              scrollable.push(this);
+            }
+            // then put it back, of course
+            el[dir](0);
+          }
+        });
+
+        // If no scrollable elements, fall back to <body>,
+        // if it's in the jQuery collection
+        // (doing this because Safari sets scrollTop async,
+        // so can't set it to 1 and immediately get the value.)
+        if (!scrollable.length) {
+          this.each(function() {
+            if (this.nodeName === 'BODY') {
+              scrollable = [this];
+            }
+          });
+        }
+
+        // Use the first scrollable element if we're calling firstScrollable()
+        if ( opts.el === 'first' && scrollable.length > 1 ) {
+          scrollable = [ scrollable[0] ];
+        }
+
+        return scrollable;
+      };
+
+  $.fn.extend({
+    scrollable: function(dir) {
+      var scrl = getScrollable.call(this, {dir: dir});
+      return this.pushStack(scrl);
+    },
+    firstScrollable: function(dir) {
+      var scrl = getScrollable.call(this, {el: 'first', dir: dir});
+      return this.pushStack(scrl);
+    },
+
+    smoothScroll: function(options, extra) {
+      options = options || {};
+
+      if ( options === 'options' ) {
+        if ( !extra ) {
+          return this.first().data('ssOpts');
+        }
+        return this.each(function() {
+          var $this = $(this),
+              opts = $.extend($this.data('ssOpts') || {}, extra);
+
+          $(this).data('ssOpts', opts);
+        });
+      }
+
+      var opts = $.extend({}, $.fn.smoothScroll.defaults, options),
+          locationPath = $.smoothScroll.filterPath(location.pathname);
+
+      this
+      .unbind('click.smoothscroll')
+      .bind('click.smoothscroll', function(event) {
+        var link = this,
+            $link = $(this),
+            thisOpts = $.extend({}, opts, $link.data('ssOpts') || {}),
+            exclude = opts.exclude,
+            excludeWithin = thisOpts.excludeWithin,
+            elCounter = 0, ewlCounter = 0,
+            include = true,
+            clickOpts = {},
+            hostMatch = ((location.hostname === link.hostname) || !link.hostname),
+            pathMatch = thisOpts.scrollTarget || ( $.smoothScroll.filterPath(link.pathname) === locationPath ),
+            thisHash = escapeSelector(link.hash);
+
+        if ( !thisOpts.scrollTarget && (!hostMatch || !pathMatch || !thisHash) ) {
+          include = false;
+        } else {
+          while (include && elCounter < exclude.length) {
+            if ($link.is(escapeSelector(exclude[elCounter++]))) {
+              include = false;
+            }
+          }
+          while ( include && ewlCounter < excludeWithin.length ) {
+            if ($link.closest(excludeWithin[ewlCounter++]).length) {
+              include = false;
+            }
+          }
+        }
+
+        if ( include ) {
+
+          if ( thisOpts.preventDefault ) {
+            event.preventDefault();
+          }
+
+          $.extend( clickOpts, thisOpts, {
+            scrollTarget: thisOpts.scrollTarget || thisHash,
+            link: link
+          });
+
+          $.smoothScroll( clickOpts );
+        }
+      });
+
+      return this;
+    }
+  });
+
+  $.smoothScroll = function(options, px) {
+    if ( options === 'options' && typeof px === 'object' ) {
+      return $.extend(optionOverrides, px);
+    }
+    var opts, $scroller, scrollTargetOffset, speed, delta,
+        scrollerOffset = 0,
+        offPos = 'offset',
+        scrollDir = 'scrollTop',
+        aniProps = {},
+        aniOpts = {};
+
+    if (typeof options === 'number') {
+      opts = $.extend({link: null}, $.fn.smoothScroll.defaults, optionOverrides);
+      scrollTargetOffset = options;
+    } else {
+      opts = $.extend({link: null}, $.fn.smoothScroll.defaults, options || {}, optionOverrides);
+      if (opts.scrollElement) {
+        offPos = 'position';
+        if (opts.scrollElement.css('position') === 'static') {
+          opts.scrollElement.css('position', 'relative');
+        }
+      }
+    }
+
+    scrollDir = opts.direction === 'left' ? 'scrollLeft' : scrollDir;
+
+    if ( opts.scrollElement ) {
+      $scroller = opts.scrollElement;
+      if ( !(/^(?:HTML|BODY)$/).test($scroller[0].nodeName) ) {
+        scrollerOffset = $scroller[scrollDir]();
+      }
+    } else {
+      $scroller = $('html, body').firstScrollable(opts.direction);
+    }
+
+    // beforeScroll callback function must fire before calculating offset
+    opts.beforeScroll.call($scroller, opts);
+
+    scrollTargetOffset = (typeof options === 'number') ? options :
+                          px ||
+                          ( $(opts.scrollTarget)[offPos]() &&
+                          $(opts.scrollTarget)[offPos]()[opts.direction] ) ||
+                          0;
+
+    aniProps[scrollDir] = scrollTargetOffset + scrollerOffset + opts.offset;
+    speed = opts.speed;
+
+    // automatically calculate the speed of the scroll based on distance / coefficient
+    if (speed === 'auto') {
+
+      // $scroller.scrollTop() is position before scroll, aniProps[scrollDir] is position after
+      // When delta is greater, speed will be greater.
+      delta = aniProps[scrollDir] - $scroller.scrollTop();
+      if(delta < 0) {
+        delta *= -1;
+      }
+
+      // Divide the delta by the coefficient
+      speed = delta / opts.autoCoefficient;
+    }
+
+    aniOpts = {
+      duration: speed,
+      easing: opts.easing,
+      complete: function() {
+        opts.afterScroll.call(opts.link, opts);
+      }
+    };
+
+    if (opts.step) {
+      aniOpts.step = opts.step;
+    }
+
+    if ($scroller.length) {
+      $scroller.stop().animate(aniProps, aniOpts);
+    } else {
+      opts.afterScroll.call(opts.link, opts);
+    }
+  };
+
+  $.smoothScroll.version = version;
+  $.smoothScroll.filterPath = function(string) {
+    string = string || '';
+    return string
+      .replace(/^\//,'')
+      .replace(/(?:index|default).[a-zA-Z]{3,4}$/,'')
+      .replace(/\/$/,'');
+  };
+
+  // default options
+  $.fn.smoothScroll.defaults = defaults;
+
+  function escapeSelector (str) {
+    return str.replace(/(:|\.|\/)/g,'\\$1');
+  }
+
+}));
+
 var CONFIG = CONFIG || {};
 
 CONFIG.MENU = CONFIG.MENU || {};
@@ -9336,7 +9807,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	VIEW.HERO.init();
 	CONTROLLER.HERO.init();
 	VIEW.MENU.init();
-	//CONTROLLER.SCROLL.init();
+	CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();
 	//VIEW.MAP.init();
@@ -9520,6 +9991,220 @@ CONTROLLER.HERO = (function(window){
 
 }(window));
 
+var CONTROLLER = CONTROLLER || {};
+
+CONTROLLER.SCROLL = (function(window){
+
+	var scroll = {};
+
+	var sectionIndex = 0,
+		sectionHeight = window.innerHeight,
+		touchStartY = undefined,
+		touchEndY = undefined,
+		touchDif = undefined,
+		touchMoveY = undefined,
+		newTouchMoveY = undefined,
+		target = undefined,
+		lastTouchMoveY = undefined,
+		isTouchMoveDisabled = false;
+
+	this.navEl = undefined;
+	this.mainSection = undefined;
+	this.mainSectionLength = undefined;
+	this.navButtons = undefined;
+	this.logoButton = undefined;
+
+	scroll.nextScroll = function() {
+
+		if (sectionIndex === 0) {
+			VIEW.SCROLL.onScroll(1);
+			//VIEW.SCROLL.logoMini(true);
+			sectionIndex++;
+		} else if (sectionIndex > 0 && sectionIndex < this.mainSectionLength - 1) {
+			VIEW.SCROLL.onScroll(sectionIndex + 1);
+			sectionIndex++;
+		}
+	}
+
+	scroll.prevScroll = function() {
+
+		if (sectionIndex === 1) {
+			//VIEW.SCROLL.logoMini(false);
+		}
+
+		if (sectionIndex > 0) {
+			VIEW.SCROLL.onScroll(sectionIndex - 1);
+			sectionIndex--;
+		}
+	}
+
+	scroll.defaultScroll = function(direction, index) {
+
+		sectionIndex = index;
+
+		if( direction === "next") {
+			scroll.nextScroll();
+		} else {
+			scroll.prevScroll();
+		}
+	}
+
+	scroll.touchStart = function(e) {
+		//console.log("touchStart", e);
+		touchStartY = e.changedTouches[0].clientY;
+		touchMoveY = touchStartY;
+		target = e.target;
+
+		e.preventDefault();
+	}
+
+	scroll.touchMove = function(e) {
+
+		newTouchMoveY = e.changedTouches[0].clientY;
+
+		var touchMoveDif = touchMoveY - newTouchMoveY;
+
+		e.preventDefault();
+
+		if (touchMoveDif > 30 && !isTouchMoveDisabled) {
+
+			scroll.nextScroll();
+
+			isTouchMoveDisabled = true;
+
+		} else if(touchMoveDif < -30 && !isTouchMoveDisabled) {
+			
+			scroll.prevScroll();
+
+			isTouchMoveDisabled = true;
+		}
+	}
+
+	scroll.touchEnd = function(e, isFeed) {
+
+		touchEndY = e.changedTouches[0].clientY;
+		touchDif = touchStartY - touchEndY;
+		isTouchMoveDisabled = false;
+
+		if (touchDif > 0) {
+			e.preventDefault();
+		} else if(touchDif < 0) {
+			e.preventDefault();
+		}
+	}
+
+	scroll.onListenTouch = function() {
+
+		for (i = 0; i < this.mainSectionLength; i++) {
+			this.mainSection[i].addEventListener("touchstart", scroll.touchStart, false);
+			this.mainSection[i].addEventListener("touchmove", scroll.touchMove, false);
+			this.mainSection[i].addEventListener("touchend", scroll.touchEnd, false);
+		}
+
+		if (!CONTROLLER.MAIN.isTouch) {
+			scroll.onListenWheel()
+		}
+	}
+
+	scroll.offListenTouch = function() {
+
+		for (i = 0; i < this.mainSectionLength; i++) {
+			this.mainSection[i].removeEventListener("touchstart", scroll.touchStart, false);
+			this.mainSection[i].removeEventListener("touchmove", scroll.touchMove, false);
+			this.mainSection[i].removeEventListener("touchend", scroll.touchEnd, false);
+		}
+
+		if(!CONTROLLER.MAIN.isTouch) {
+			scroll.offListenWheel();
+		}
+	}
+
+	scroll.onListenWheel = function() {
+
+		var isScrollTimeout = 0,
+			scrollTimeInterval = undefined;
+
+
+		function onScrollTimeOut() {
+			var scrollTimeOut = setTimeout(function(){
+				isScrollTimeout = 0;
+			},800);
+
+			isScrollTimeout = 3;
+		}
+
+		function onMouseWheel(e) {
+			//console.log(e.deltaY);
+			if(e.deltaY < 0 && e.deltaY > -100 && !isScrollTimeout){
+
+				//console.log(e.deltaY);
+				scroll.nextScroll();
+				onScrollTimeOut();
+
+			} else if (e.deltaY > 0 && e.deltaY < 100 &&!isScrollTimeout) {
+
+				//console.log(e.deltaY);
+				scroll.prevScroll();
+				onScrollTimeOut();
+			}
+
+
+
+			e.preventDefault();
+			e.stopPropagation();
+		}
+
+		$("body").on("mousewheel", onMouseWheel);
+	}
+
+	scroll.offListenWheel = function() {
+		$("body").off("mousewheel");
+	}
+
+	scroll.onNavClick = function() {
+
+		for (i = 0; i < this.navButtons.length; i++) {
+			scroll.navButtons[i].addEventListener("click", function(e) {
+				var id = this.getAttribute("data-id");
+				VIEW.SCROLL.onScroll(id);
+				VIEW.SCROLL.updateNav(id);
+			}, false);
+		}
+
+		this.logoButton.addEventListener("click", function(e) {
+			VIEW.SCROLL.onScroll(0);
+			VIEW.SCROLL.updateNav(0);
+		}, false);
+
+	}
+
+	scroll.init = function() {
+
+		this.navEl = document.getElementById("nav");
+		this.mainSection = document.getElementsByClassName("section");
+		this.navButtons = document.getElementsByClassName("nav-buttons");
+		this.mainSectionLength = this.mainSection.length;
+		this.logoButton = document.getElementById("logo-wannae");
+
+
+		scroll.onNavClick();
+		//scroll.onListenTouch();
+		scroll.onListenWheel();
+
+	}
+
+	$(window).on("beforeunload", function() {
+		$(window).scrollTop(0);
+	});
+
+	$(window).on("load", function(){
+		$(window).scrollTop(0);
+	});
+
+	return scroll;
+
+}(window));
+
 var VIEW = VIEW || {};
 
 VIEW.HERO = (function(window){
@@ -9600,5 +10285,53 @@ VIEW.MENU = (function(window){
 	}
 
 	return menu;
+
+}(window));
+
+var VIEW = VIEW || {};
+
+VIEW.SCROLL = (function(window){
+
+	var scroll = {};
+
+	var initialScroll = false,
+		duration = 500;
+
+	scroll.onScroll = function(index) {
+
+		var newOffset = $(CONTROLLER.SCROLL.mainSection[index]).offset(),
+			newY = newOffset.top;
+
+		$.smoothScroll({
+			scrollElement: $("html, body"),
+			scrollTarget: CONTROLLER.SCROLL.mainSection[index]
+		});
+	}
+
+	scroll.updateNav = function(index)  {
+
+		index = index - 1;
+
+		for (i = 0; i < CONTROLLER.SCROLL.navButtons.length; i++) {
+			CONTROLLER.SCROLL.navButtons[i].className = "nav-buttons";
+		}
+
+		if(index >= 0) {
+			CONTROLLER.SCROLL.navButtons[index].className = "nav-buttons selected";
+		}
+		
+	}
+
+	scroll.logoMini = function(state){
+
+		if(state) {
+			CONTROLLER.SCROLL.navEl.className = "nav nav-minimized";
+		} else if (!state) {
+			CONTROLLER.SCROLL.navEl.className = "nav";
+		}
+		
+	}
+
+	return scroll;
 
 }(window));

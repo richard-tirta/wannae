@@ -17,28 +17,20 @@ VIEW.SCROLL = (function(window){
 			scrollElement: $("html, body"),
 			scrollTarget: CONTROLLER.SCROLL.mainSection[index]
 		});
-
-		// $("body").animate({
-		// 	scrollTop: newY
-		// }, 500, "easeOutQuad", function(){
-		// 	$("body").scrollTop(newY);
-		// });
-
-		if(index === 2) {
-			CONTROLLER.SCROLL.arrowDownButton.className = "icon-arrow-down arrow-black";
-		} else if (index === 3) {
-			CONTROLLER.SCROLL.arrowDownButton.className = "icon-arrow-down hidden";
-		} else {
-			CONTROLLER.SCROLL.arrowDownButton.className = "icon-arrow-down";
-		}
 	}
 
-	scroll.testScroll = function() {
-		$("body").animate({
-			scrollTop: 920
-		}, 500, "easeOutQuad", function(){
-			console.log("current test scrollTop", $("body").scrollTop());
-		});
+	scroll.updateNav = function(index)  {
+
+		index = index - 1;
+
+		for (i = 0; i < CONTROLLER.SCROLL.navButtons.length; i++) {
+			CONTROLLER.SCROLL.navButtons[i].className = "nav-buttons";
+		}
+
+		if(index >= 0) {
+			CONTROLLER.SCROLL.navButtons[index].className = "nav-buttons selected";
+		}
+		
 	}
 
 	scroll.logoMini = function(state){

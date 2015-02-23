@@ -41,12 +41,25 @@ header {
 nav {
 	@extend .bg-walls;
 	@include tab-module;
-	color: $dark-gray;
-	height: 32px;
+	height: 35px;
 	margin-top: -25px;
-	padding-top: 33px;
+	padding-top: 30px;
 	text-align: center;
 	z-index: 11;
+	a {
+		color: $dark-gray;
+		font-family: 'Lobster', cursive;
+		font-size: em(14);
+		font-weight: bold;
+		margin: 0 5px;
+		@include medium {
+			font-size: em(21);
+			margin: 0 30px;
+		}
+		&.selected {
+			text-decoration: underline;
+		}
+	}
 	@include medium {
 		margin-top: 0;
 		top: 175px;

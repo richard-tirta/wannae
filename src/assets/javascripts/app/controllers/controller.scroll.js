@@ -13,18 +13,20 @@ CONTROLLER.SCROLL = (function(window){
 		touchMoveY = undefined,
 		newTouchMoveY = undefined,
 		target = undefined,
-		lastTouchMoveY = undefined;
+		lastTouchMoveY = undefined,
+		isTouchMoveDisabled = false;
 
 	this.navEl = undefined;
 	this.mainSection = undefined;
 	this.mainSectionLength = undefined;
-	this.arrowDownButton = undefined;
+	this.navButtons = undefined;
+	this.logoButton = undefined;
 
 	scroll.nextScroll = function() {
 
 		if (sectionIndex === 0) {
 			VIEW.SCROLL.onScroll(1);
-			VIEW.SCROLL.logoMini(true);
+			//VIEW.SCROLL.logoMini(true);
 			sectionIndex++;
 		} else if (sectionIndex > 0 && sectionIndex < this.mainSectionLength - 1) {
 			VIEW.SCROLL.onScroll(sectionIndex + 1);
@@ -35,7 +37,7 @@ CONTROLLER.SCROLL = (function(window){
 	scroll.prevScroll = function() {
 
 		if (sectionIndex === 1) {
-			VIEW.SCROLL.logoMini(false);
+			//VIEW.SCROLL.logoMini(false);
 		}
 
 		if (sectionIndex > 0) {
@@ -70,78 +72,36 @@ CONTROLLER.SCROLL = (function(window){
 
 		var touchMoveDif = touchMoveY - newTouchMoveY;
 
-		if (touchMoveDif > 10) {
-			var currentScroll = $("body").scrollTop();
-			var newScroll = currentScroll + 12;
-
-			$("body").scrollTop(newScroll);
-
-
-			if (lastTouchMoveY < newTouchMoveY) {
-				touchMoveY = newTouchMoveY;
-			}
-
-		} else if(touchMoveDif < -10) {
-			var currentScroll = $("body").scrollTop();
-			var newScroll = currentScroll - 12;
-
-			console.log(touchMoveDif);
-
-			$("body").scrollTop(newScroll);
-
-			if (lastTouchMoveY > newTouchMoveY) {
-				touchMoveY = newTouchMoveY;
-			}
-		}
-
-		lastTouchMoveY = newTouchMoveY;
 		e.preventDefault();
+
+		if (touchMoveDif > 30 && !isTouchMoveDisabled) {
+
+			scroll.nextScroll();
+
+			isTouchMoveDisabled = true;
+
+		} else if(touchMoveDif < -30 && !isTouchMoveDisabled) {
+			
+			scroll.prevScroll();
+
+			isTouchMoveDisabled = true;
+		}
 	}
 
 	scroll.touchEnd = function(e, isFeed) {
-		var hasManhattan = $(target).hasClass("callout-manhattan"),
-			hasBrooklyn = $(target).hasClass("callout-brooklyn"),
-			hasVipManhattan = $(target).closest("#vip-manhattan").length,
-			hasVipBrooklyn = $(target).closest("#vip-brooklyn").length;
 
 		touchEndY = e.changedTouches[0].clientY;
 		touchDif = touchStartY - touchEndY;
-		//sectionHeight = window.innerHeight;
-
-		//console.log(target);
-		//console.log(hasVipManhattan);
+		isTouchMoveDisabled = false;
 
 		if (touchDif > 0) {
-			//console.log("next");
-			scroll.nextScroll();
 			e.preventDefault();
 		} else if(touchDif < 0) {
-			scroll.prevScroll();
 			e.preventDefault();
-			//console.log("prev");
-		} else if (hasVipManhattan) {
-			window.open("https://www.google.com/maps/dir/Current+Location/40.749932,-73.990991","_blank");
-		} else if (hasVipBrooklyn){
-			window.open("https://www.google.com/maps/dir/Current+Location/40.682755,-73.976882","_blank");
-		} else if (hasManhattan) {
-
-			VIEW.MAIN.onOpenTab("map");
-			VIEW.MAP.onOpenMapTab("manhattan");
-			VIEW.MAP.onMapToggle("manhattan");
-
-		} else if (hasBrooklyn) {
-
-			VIEW.MAIN.onOpenTab("map");
-			VIEW.MAP.onOpenMapTab("brooklyn");
-			VIEW.MAP.onMapToggle("brooklyn");
-
 		}
 	}
 
 	scroll.onListenTouch = function() {
-
-		// window.addEventListener("touchstart", scroll.touchStart, false);
-		// window.addEventListener("touchend", scroll.touchEnd, false);
 
 		for (i = 0; i < this.mainSectionLength; i++) {
 			this.mainSection[i].addEventListener("touchstart", scroll.touchStart, false);
@@ -149,23 +109,12 @@ CONTROLLER.SCROLL = (function(window){
 			this.mainSection[i].addEventListener("touchend", scroll.touchEnd, false);
 		}
 
-		// $(window).load(function() {
-		// 	for (i = 0; i < this.mainSectionLength; i++) {
-				
-		// 	}
-		// }
-
-		CONTROLLER.MAIN.registerButtonEl.addEventListener("touchstart", scroll.touchStart, false);
-		CONTROLLER.MAIN.registerButtonEl.addEventListener("touchend", scroll.touchEnd, false);
-
 		if (!CONTROLLER.MAIN.isTouch) {
 			scroll.onListenWheel()
 		}
 	}
 
 	scroll.offListenTouch = function() {
-		//window.removeEventListener("touchstart", scroll.touchStart, false);
-		//window.removeEventListener("touchend", scroll.touchEnd, false);
 
 		for (i = 0; i < this.mainSectionLength; i++) {
 			this.mainSection[i].removeEventListener("touchstart", scroll.touchStart, false);
@@ -183,21 +132,6 @@ CONTROLLER.SCROLL = (function(window){
 		var isScrollTimeout = 0,
 			scrollTimeInterval = undefined;
 
-		// function onScrollTimeInterval() {
-
-		// 	var scrollTimeInterval = setInterval(function() {
-
-		// 		if(isScrollTimeout > 0) {
-		// 			isScrollTimeout--;
-		// 		} else {
-		// 			//console.log("DONE");
-		// 			clearInterval(scrollTimeInterval);
-		// 		}
-		// 		//console.log(isScrollTimeout)
-		// 	}, 50);
-
-			
-		// }
 
 		function onScrollTimeOut() {
 			var scrollTimeOut = setTimeout(function(){
@@ -211,19 +145,19 @@ CONTROLLER.SCROLL = (function(window){
 			//console.log(e.deltaY);
 			if(e.deltaY < 0 && e.deltaY > -100 && !isScrollTimeout){
 
-				console.log(e.deltaY);
+				//console.log(e.deltaY);
 				scroll.nextScroll();
 				onScrollTimeOut();
 
 			} else if (e.deltaY > 0 && e.deltaY < 100 &&!isScrollTimeout) {
 
-				console.log(e.deltaY);
+				//console.log(e.deltaY);
 				scroll.prevScroll();
 				onScrollTimeOut();
 			}
 
-			
-			
+
+
 			e.preventDefault();
 			e.stopPropagation();
 		}
@@ -235,21 +169,35 @@ CONTROLLER.SCROLL = (function(window){
 		$("body").off("mousewheel");
 	}
 
+	scroll.onNavClick = function() {
+
+		for (i = 0; i < this.navButtons.length; i++) {
+			scroll.navButtons[i].addEventListener("click", function(e) {
+				var id = this.getAttribute("data-id");
+				VIEW.SCROLL.onScroll(id);
+				VIEW.SCROLL.updateNav(id);
+			}, false);
+		}
+
+		this.logoButton.addEventListener("click", function(e) {
+			VIEW.SCROLL.onScroll(0);
+			VIEW.SCROLL.updateNav(0);
+		}, false);
+
+	}
+
 	scroll.init = function() {
 
 		this.navEl = document.getElementById("nav");
-		this.arrowDownButton = document.getElementById("icon-arrow-down");
 		this.mainSection = document.getElementsByClassName("section");
+		this.navButtons = document.getElementsByClassName("nav-buttons");
 		this.mainSectionLength = this.mainSection.length;
+		this.logoButton = document.getElementById("logo-wannae");
 
-		//console.log(sectionHeight);
 
-		scroll.onListenTouch();
-
-		this.arrowDownButton.addEventListener("click", function(e) {
-			e.preventDefault();
-			scroll.nextScroll();
-		}, false);
+		scroll.onNavClick();
+		//scroll.onListenTouch();
+		scroll.onListenWheel();
 
 	}
 
