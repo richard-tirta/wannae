@@ -36,9 +36,14 @@ CONTROLLER.HERO = (function(window){
 
 	hero.slideInit = function() {
 		var touchStartX = undefined,
+			touchMoveXDif = undefined,
 			touchEndX = undefined,
+			touchStartY = undefined,
+			touchMoveYDif = undefined,
+			touchEndY = undefined,
 			autoNext = true,
-			timer = 2;
+			timer = 2,
+			isTouchMoveDisabled = false;
 
 		this.prevSlideButton = document.getElementById("slide-left-button");
 		this.nextSlideButton = document.getElementById("slide-right-button");
@@ -66,25 +71,48 @@ CONTROLLER.HERO = (function(window){
 		}
 
 		function touchStart(e) {
-			touchStartX = e.changedTouches[0].clientX
+			touchStartX = e.changedTouches[0].clientX;
+			touchStartY = e.changedTouches[0].clientY;
 			e.preventDefault();
 			timer = 2;
 		}
 
-		function touchEnd(e) {
-			touchEndX = e.changedTouches[0].clientX;
+		function touchMove(e) {
+			touchMoveX = e.changedTouches[0].clientX;
+			touchMoveY = e.changedTouches[0].clientY;
+			touchMoveXDif = touchStartX - touchMoveX;
+			touchMoveYDif = touchStartY - touchMoveY;
+
 			e.preventDefault();
 
-			if (touchStartX > touchEndX && heroIndex < hero.modulesLength - 1) {
+			if (touchMoveXDif > 30 && !isTouchMoveDisabled && heroIndex < hero.modulesLength - 1) {
 				hero.nextSlide();
-			} else if(touchStartX < touchEndX && heroIndex > 0) {
+				isTouchMoveDisabled = true;
+			} else if(touchMoveXDif < -30 && !isTouchMoveDisabled && heroIndex > 0) {
 				hero.prevSlide();
+				isTouchMoveDisabled = true;
 			}
+
+			if (touchMoveYDif > 30 && !isTouchMoveDisabled) {
+				VIEW.SCROLL.onScroll(1);
+				VIEW.SCROLL.updateNav(1);
+			} else if (touchMoveYDif < -30 && !isTouchMoveDisabled) {
+				VIEW.SCROLL.onScroll(0);
+				VIEW.SCROLL.updateNav(0);
+			}
+
 			timer = 2;
+			e.preventDefault();
+		}
+
+		function touchEnd(e) {
+			isTouchMoveDisabled = false;
+			e.preventDefault();
 		}
 
 
 		this.slideEl.addEventListener("touchstart", touchStart, false);
+		this.slideEl.addEventListener("touchmove", touchMove, false);
 		this.slideEl.addEventListener("touchend", touchEnd, false);
 
 		this.prevSlideButton.addEventListener("click", function(e) {

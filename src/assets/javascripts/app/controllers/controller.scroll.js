@@ -196,6 +196,7 @@ CONTROLLER.SCROLL = (function(window){
 
 
 		scroll.onNavClick();
+		//VIEW.SCROLL.listenNav();
 		//scroll.onListenTouch();
 		scroll.onListenWheel();
 

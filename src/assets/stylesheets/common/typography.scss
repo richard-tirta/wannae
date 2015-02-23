@@ -1,6 +1,6 @@
 //========= TYPOGRAPHY ==========//
 
-$base: 14; // Default
+$base: 12; // Default
 
 @function em($pixels, $context: $base) {
   @return #{$pixels/$context}em
@@ -20,7 +20,7 @@ html{
 
 body {
 	font-family: 'Helvetica', Arial, sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: normal;
 	letter-spacing: 0.1em;
 }
@@ -66,10 +66,13 @@ h2 {
 }
 
 h3 {
-	font-size: em(16);
+	font-size: em(14);
 	font-family: 'Helvetica', Arial, sans-serif;
 	font-weight: bold;
 	letter-spacing: 0.01em;
+	@include large {
+		font-size: em(16);
+	}
 }
 
 h4 {
@@ -101,10 +104,12 @@ h6 {
 
 p {
 	font-family: 'Helvetica', Arial, sans-serif;
-	font-size: em(14);
 	letter-spacing: normal;
 	line-height: 1.2;
 	margin: 0;
+	@include large {
+		font-size: em(14);
+	}
 	strong {
 		font-family:'Helvetica', Arial, sans-serif;
 		font-weight: normal;
