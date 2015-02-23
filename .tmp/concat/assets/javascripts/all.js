@@ -9685,7 +9685,7 @@ CONFIG.MENU.APPETIZER = [
 		"id": 1,
 		"title": "Ginger Salad",
 		"name": "ginger-salad",
-		"description": "Traditional salad of pickled ginger with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad of pickled ginger with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
@@ -9718,11 +9718,11 @@ CONFIG.MENU.ENTREE = [
 		"id": 1,
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
-		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad consists of pickled tea leaf with toasted sesame, tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
-		"title": "Not So Stinky Garlic Noodle",
+		"title": "Not So Stinky Garlic&nbsp;Noodle",
 		"name": "not-so-stinky-garlic-noodle",
 		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
 	},
@@ -9734,15 +9734,15 @@ CONFIG.MENU.ENTREE = [
 	},
 	{
 		"id": 4,
-		"title": "Golden Curry Coconut Rice",
+		"title": "Golden Curry Coconut&nbsp;Rice",
 		"name": "golden-curry-coconut-rice",
 		"description": "Wanna-E’s spicy chicken and potato curry. Served with coconut rice"
 	},
 	{
 		"id": 5,
-		"title": "Golden Fried Rice w/ Pork Sung",
+		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
-		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
+		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork&nbsp;sung"
 	}
 ];
 
@@ -9772,7 +9772,7 @@ CONFIG.MENU.HERO = [
 		"id": 1,
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
-		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
@@ -9788,7 +9788,7 @@ CONFIG.MENU.HERO = [
 	},
 	{
 		"id": 4,
-		"title": "Golden Fried Rice w/ Pork Sung",
+		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
 		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}
@@ -9897,9 +9897,14 @@ CONTROLLER.HERO = (function(window){
 
 	hero.slideInit = function() {
 		var touchStartX = undefined,
+			touchMoveXDif = undefined,
 			touchEndX = undefined,
+			touchStartY = undefined,
+			touchMoveYDif = undefined,
+			touchEndY = undefined,
 			autoNext = true,
-			timer = 2;
+			timer = 2,
+			isTouchMoveDisabled = false;
 
 		this.prevSlideButton = document.getElementById("slide-left-button");
 		this.nextSlideButton = document.getElementById("slide-right-button");
@@ -9927,25 +9932,48 @@ CONTROLLER.HERO = (function(window){
 		}
 
 		function touchStart(e) {
-			touchStartX = e.changedTouches[0].clientX
+			touchStartX = e.changedTouches[0].clientX;
+			touchStartY = e.changedTouches[0].clientY;
 			e.preventDefault();
 			timer = 2;
 		}
 
-		function touchEnd(e) {
-			touchEndX = e.changedTouches[0].clientX;
+		function touchMove(e) {
+			touchMoveX = e.changedTouches[0].clientX;
+			touchMoveY = e.changedTouches[0].clientY;
+			touchMoveXDif = touchStartX - touchMoveX;
+			touchMoveYDif = touchStartY - touchMoveY;
+
 			e.preventDefault();
 
-			if (touchStartX > touchEndX && heroIndex < hero.modulesLength - 1) {
+			if (touchMoveXDif > 30 && !isTouchMoveDisabled && heroIndex < hero.modulesLength - 1) {
 				hero.nextSlide();
-			} else if(touchStartX < touchEndX && heroIndex > 0) {
+				isTouchMoveDisabled = true;
+			} else if(touchMoveXDif < -30 && !isTouchMoveDisabled && heroIndex > 0) {
 				hero.prevSlide();
+				isTouchMoveDisabled = true;
 			}
+
+			if (touchMoveYDif > 30 && !isTouchMoveDisabled) {
+				VIEW.SCROLL.onScroll(1);
+				VIEW.SCROLL.updateNav(1);
+			} else if (touchMoveYDif < -30 && !isTouchMoveDisabled) {
+				VIEW.SCROLL.onScroll(0);
+				VIEW.SCROLL.updateNav(0);
+			}
+
 			timer = 2;
+			e.preventDefault();
+		}
+
+		function touchEnd(e) {
+			isTouchMoveDisabled = false;
+			e.preventDefault();
 		}
 
 
 		this.slideEl.addEventListener("touchstart", touchStart, false);
+		this.slideEl.addEventListener("touchmove", touchMove, false);
 		this.slideEl.addEventListener("touchend", touchEnd, false);
 
 		this.prevSlideButton.addEventListener("click", function(e) {
@@ -10018,10 +10046,12 @@ CONTROLLER.SCROLL = (function(window){
 
 		if (sectionIndex === 0) {
 			VIEW.SCROLL.onScroll(1);
+			VIEW.SCROLL.updateNav(1);
 			//VIEW.SCROLL.logoMini(true);
 			sectionIndex++;
 		} else if (sectionIndex > 0 && sectionIndex < this.mainSectionLength - 1) {
 			VIEW.SCROLL.onScroll(sectionIndex + 1);
+			VIEW.SCROLL.updateNav(sectionIndex + 1);
 			sectionIndex++;
 		}
 	}
@@ -10034,6 +10064,7 @@ CONTROLLER.SCROLL = (function(window){
 
 		if (sectionIndex > 0) {
 			VIEW.SCROLL.onScroll(sectionIndex - 1);
+			VIEW.SCROLL.updateNav(sectionIndex - 1);
 			sectionIndex--;
 		}
 	}
@@ -10168,12 +10199,14 @@ CONTROLLER.SCROLL = (function(window){
 				var id = this.getAttribute("data-id");
 				VIEW.SCROLL.onScroll(id);
 				VIEW.SCROLL.updateNav(id);
+				sectionIndex = id;
 			}, false);
 		}
 
 		this.logoButton.addEventListener("click", function(e) {
 			VIEW.SCROLL.onScroll(0);
 			VIEW.SCROLL.updateNav(0);
+			sectionIndex = 0;
 		}, false);
 
 	}
@@ -10188,6 +10221,7 @@ CONTROLLER.SCROLL = (function(window){
 
 
 		scroll.onNavClick();
+		//VIEW.SCROLL.listenNav();
 		//scroll.onListenTouch();
 		scroll.onListenWheel();
 
@@ -10299,12 +10333,17 @@ VIEW.SCROLL = (function(window){
 
 	scroll.onScroll = function(index) {
 
-		var newOffset = $(CONTROLLER.SCROLL.mainSection[index]).offset(),
-			newY = newOffset.top;
+		var target = undefined;
+
+		if(index === 0) {
+			target = 0;
+		} else {
+			target = CONTROLLER.SCROLL.mainSection[index];
+		}
 
 		$.smoothScroll({
 			scrollElement: $("html, body"),
-			scrollTarget: CONTROLLER.SCROLL.mainSection[index]
+			scrollTarget: target
 		});
 	}
 

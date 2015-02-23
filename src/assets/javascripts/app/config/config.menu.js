@@ -8,7 +8,7 @@ CONFIG.MENU.APPETIZER = [
 		"id": 1,
 		"title": "Ginger Salad",
 		"name": "ginger-salad",
-		"description": "Traditional salad of pickled ginger with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad of pickled ginger with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
@@ -41,11 +41,11 @@ CONFIG.MENU.ENTREE = [
 		"id": 1,
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
-		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad consists of pickled tea leaf with toasted sesame, tomatoes, cabbage, chili, lime, garlic, fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
-		"title": "Not So Stinky Garlic Noodle",
+		"title": "Not So Stinky Garlic&nbsp;Noodle",
 		"name": "not-so-stinky-garlic-noodle",
 		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
 	},
@@ -57,15 +57,15 @@ CONFIG.MENU.ENTREE = [
 	},
 	{
 		"id": 4,
-		"title": "Golden Curry Coconut Rice",
+		"title": "Golden Curry Coconut&nbsp;Rice",
 		"name": "golden-curry-coconut-rice",
 		"description": "Wanna-E’s spicy chicken and potato curry. Served with coconut rice"
 	},
 	{
 		"id": 5,
-		"title": "Golden Fried Rice w/ Pork Sung",
+		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
-		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
+		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork&nbsp;sung"
 	}
 ];
 
@@ -95,7 +95,7 @@ CONFIG.MENU.HERO = [
 		"id": 1,
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
-		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder (or vegetarian)"
+		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
@@ -111,7 +111,7 @@ CONFIG.MENU.HERO = [
 	},
 	{
 		"id": 4,
-		"title": "Golden Fried Rice w/ Pork Sung",
+		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
 		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}

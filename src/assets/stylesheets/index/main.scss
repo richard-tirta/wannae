@@ -71,10 +71,10 @@
 	height: auto;
 	padding-bottom: 20px;
 	@include medium {
-		height: 500px;
+		height: calc(100% - 285px);
 	}
 	@include large {
-		height: 650px;
+		height: calc(100% - 285px);
 	}
 	h2 {
 		border-top: 1px solid rgba(230,230,230,0.5);
@@ -91,6 +91,7 @@
 	.menu-container {
 		max-width: 1670px;
 		height: 100%;
+		margin: 0 auto;
 	}
 	.appetizer-module {
 		background: rgb(50,50,50);
@@ -98,6 +99,7 @@
 		position: relative;
 		padding-bottom: 20px;
 		width: 100%;
+		overflow: hidden;
 		&:nth-child(even) {
 			background: rgb(40,40,40);
 		}
@@ -106,10 +108,17 @@
 			height: 100%;
 		}
 		img {
-			width: 100%;
+			display: block;
+			width: auto;
+			height: 65%;
+			margin: 0 auto;
+			@media (orientation: portrait) { 
+				height: auto;
+				width: 100%;
+			}
 		}
 		.module-text {
-			padding: 5px 10px 0 10px;
+			padding: 10px 10px 0 10px;
 		}
 	}
 	&.section-dessert{
@@ -162,7 +171,7 @@
 		@include clearfix;
 		@include medium {
 			width: 700px;
-			margin: 50px auto;
+			margin: 2% auto;
 		} 
 	}
 	.description {

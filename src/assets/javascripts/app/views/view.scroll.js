@@ -10,12 +10,17 @@ VIEW.SCROLL = (function(window){
 
 	scroll.onScroll = function(index) {
 
-		var newOffset = $(CONTROLLER.SCROLL.mainSection[index]).offset(),
-			newY = newOffset.top;
+		var target = undefined;
+
+		if(index === 0) {
+			target = 0;
+		} else {
+			target = CONTROLLER.SCROLL.mainSection[index];
+		}
 
 		$.smoothScroll({
 			scrollElement: $("html, body"),
-			scrollTarget: CONTROLLER.SCROLL.mainSection[index]
+			scrollTarget: target
 		});
 	}
 
