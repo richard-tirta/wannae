@@ -179,7 +179,7 @@ CONTROLLER.SCROLL = (function(window){
 				var id = this.getAttribute("data-id");
 				VIEW.SCROLL.onScroll(id);
 				VIEW.SCROLL.updateNav(id);
-				sectionIndex = id;
+				sectionIndex = parseInt(id);
 			}, false);
 		}
 
