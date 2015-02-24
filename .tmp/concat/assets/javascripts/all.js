@@ -9793,6 +9793,215 @@ CONFIG.MENU.HERO = [
 		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}
 ];
+var CONFIG = CONFIG || {};
+
+CONFIG.LOCATION = CONFIG.LOCATION || {};
+
+CONFIG.LOCATION.EVENT = [
+	{
+		"id": 1,
+		"type": "event",
+		"title": "AKQA",
+		"address": "360 Third St, San Francisco 94103",
+		"telephone": "",
+		"email": "",
+		"web": "",
+		"latitude": 37.782547,
+		"longitude": -122.39789,
+		"description": "Description"
+	}
+];
+
+CONFIG.LOCATION.STYLE = [
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#aee2e0"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#abce83"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#769E72"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#7B8758"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#EBF4A4"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            },
+            {
+                "color": "#8dab68"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#5B5B3F"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#ABCE83"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#A4C67D"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#9BBF72"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#EBF4A4"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#87ae79"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f2200"
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            },
+            {
+                "visibility": "on"
+            },
+            {
+                "weight": 4.1
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#495421"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    }
+];
 //	Note that Gruntfile is being setup so it loads vendor first, everything other than main.js and main.js at the very end.
 //  Therefore make sure you put your document.ready() or any initialization here 
 //  unless you use other kind of setup such as require.js or angularj.js
@@ -9810,7 +10019,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();
-	//VIEW.MAP.init();
+	VIEW.MAP.init();
 
 });
 
@@ -10372,5 +10581,173 @@ VIEW.SCROLL = (function(window){
 	}
 
 	return scroll;
+
+}(window));
+
+var VIEW = VIEW || {};
+
+VIEW.MAP = (function(window){
+
+	var map = {};
+
+	map.tabMapInit = function(mapObject, eventList, el, lat, lng, zoom) {
+		var eventList = eventList;
+
+		var mapElement = document.getElementById(el);
+
+		var mapOptions = {
+			center: new google.maps.LatLng(
+				lat,
+				lng
+			),
+			zoom: zoom,
+			zoomControl: false,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.DEFAULT,
+			},
+			disableDoubleClickZoom: true,
+			mapTypeControl: false,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+			},
+			scaleControl: true,
+			scrollwheel: true,
+			panControl: false,
+			streetViewControl: false,
+			draggable : true,
+			overviewMapControl: true,
+			overviewMapControlOptions: {
+				opened: false,
+			},
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			styles: CONFIG.LOCATION.STYLE
+		}
+
+		mapObject = new google.maps.Map(mapElement, mapOptions);
+		
+		var infoWindow = new google.maps.InfoWindow({
+			pixelOffset: new google.maps.Size(-25, 0),
+			maxWidth: 150
+		});
+
+		var marker, i;
+
+		var markerIcon = {
+			url: "./assets/images/icon-map-pointer.png",
+			size: new google.maps.Size(96, 105),
+			origin: new google.maps.Point(0, 0),
+			anchor: new google.maps.Point(17, 34),
+			scaledSize: new google.maps.Size(50, 50)
+		};
+
+		for (i = 0; i < eventList.length; i++) {
+
+			marker = new google.maps.Marker({
+				icon: markerIcon,
+				position: new google.maps.LatLng(eventList[i].latitude, eventList[i].longitude),
+				map: mapObject,
+				title: eventList[i].title,
+				desc: eventList[i].description,
+				tel: eventList[i].telephone,
+				email: eventList[i].email,
+				web: eventList[i].web
+			});
+			link = '';
+
+			google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				return function() {
+
+					//CONTROLLER.TRACKING.mapTracking(el);
+					
+					var mapDirectionUrl = "https://www.google.com/maps/dir/Current+Location/" + 
+					eventList[i].latitude +","+ eventList[i].longitude;
+
+					infoWindow.setContent(
+						"<h6>" +
+						eventList[i].title + 
+						"</h6><p><strong>" +
+						eventList[i].address +
+						"</strong></p><a target='_blank' class='map-direction-link' href='" + 
+						mapDirectionUrl +
+						"'><p><strong>GET DIRECTIONS</strong></p></a>"
+					);
+					infoWindow.open(mapObject, marker);
+				}
+			})(marker, i));
+		}
+	}
+
+	map.tabMapOnReady = function() {
+
+		var tabMapLocation = undefined,
+			latitude = 37.766237,
+			longitude = -122.44423,
+			zoom = 12;
+
+		map.tabMapInit(
+			tabMapLocation,
+			CONFIG.LOCATION.EVENT,
+			"location-map", 
+			latitude, 
+			longitude, 
+			zoom
+		);
+
+	}
+
+	map.calendarInit = function() {
+
+		var data = {};
+		data.key = "AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8";
+
+		console.log(data);
+
+		$.ajax({
+			type: "GET",
+			url: "https://www.googleapis.com/calendar/v3/calendars/gjr00mo0ha62qrfoaandjri3co%40group.calendar.google.com/events",
+			data: data,
+			dataType: "json",
+			success: function(response){
+				//console.log(response);
+				//console.log(response.items)
+				map.populateCalendar(response.items);
+			}
+		});
+		//https://www.googleapis.com/calendar/v3/calendars/gjr00mo0ha62qrfoaandjri3co%40group.calendar.google.com/events?key=AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8
+	}
+
+	map.populateCalendar = function(data) {
+
+		for (i = 0; i < data.length; i++) {
+			//console.log(data[i]);
+			if(data[i].location) {
+				console.log(data[i].location);
+			}
+
+		}
+		
+	}
+
+	map.init = function() {
+
+		function loadGMapAPI() {
+
+			var script = document.createElement('script');
+
+			script.type = 'text/javascript';
+			
+			script.src = "https://maps.googleapis.com/maps/api/js?" +
+			"key=AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8&sensor=false&extension=.js&callback=VIEW.MAP.tabMapOnReady";
+
+			document.body.appendChild(script);
+		}
+
+		window.onload = loadGMapAPI;
+
+		map.calendarInit();
+
+	}
+
+	return map;
 
 }(window));

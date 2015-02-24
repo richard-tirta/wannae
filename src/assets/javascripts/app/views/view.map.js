@@ -123,10 +123,24 @@ VIEW.MAP = (function(window){
 			data: data,
 			dataType: "json",
 			success: function(response){
-				console.log(response.items)
+				//console.log(response);
+				//console.log(response.items)
+				map.populateCalendar(response.items);
 			}
 		});
 		//https://www.googleapis.com/calendar/v3/calendars/gjr00mo0ha62qrfoaandjri3co%40group.calendar.google.com/events?key=AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8
+	}
+
+	map.populateCalendar = function(data) {
+
+		for (i = 0; i < data.length; i++) {
+			//console.log(data[i]);
+			if(data[i].location) {
+				console.log(data[i].location);
+			}
+
+		}
+		
 	}
 
 	map.init = function() {
