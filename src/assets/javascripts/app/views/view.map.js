@@ -110,6 +110,25 @@ VIEW.MAP = (function(window){
 
 	}
 
+	map.calendarInit = function() {
+
+		var data = {};
+		data.key = "AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8";
+
+		console.log(data);
+
+		$.ajax({
+			type: "GET",
+			url: "https://www.googleapis.com/calendar/v3/calendars/gjr00mo0ha62qrfoaandjri3co%40group.calendar.google.com/events",
+			data: data,
+			dataType: "json",
+			success: function(response){
+				console.log(response.items)
+			}
+		});
+		//https://www.googleapis.com/calendar/v3/calendars/gjr00mo0ha62qrfoaandjri3co%40group.calendar.google.com/events?key=AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8
+	}
+
 	map.init = function() {
 
 		function loadGMapAPI() {
@@ -119,12 +138,14 @@ VIEW.MAP = (function(window){
 			script.type = 'text/javascript';
 			
 			script.src = "https://maps.googleapis.com/maps/api/js?" +
-			"key=AIzaSyDGsr12s4drDwEZXOm9EuDu9ahbND33GzU&sensor=false&extension=.js&callback=VIEW.MAP.tabMapOnReady";
+			"key=AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8&sensor=false&extension=.js&callback=VIEW.MAP.tabMapOnReady";
 
 			document.body.appendChild(script);
 		}
 
 		window.onload = loadGMapAPI;
+
+		map.calendarInit();
 
 	}
 
