@@ -53,7 +53,10 @@ VIEW.MAP = (function(window){
 
 		var marker, i;
 		var icon1 = "./assets/images/icon-map-pointer.png",
-			icon2 = "./assets/images/icon-arrow-right.png";
+			icon2 = "./assets/images/icon-map-pointer-hover.png";
+
+		var mapDirectionUrl = "https://www.google.com/maps/dir/Current+Location/" + 
+				location.k +","+ location.D;
 
 		var markerIcon = {
 			url: icon1,
@@ -80,15 +83,19 @@ VIEW.MAP = (function(window){
 			marker.setIcon(icon1);
 		});
 
+
+		$("#calendar-list-" + i).on("click", function(e){
+			window.open(mapDirectionUrl, "_blank");
+		});
+
 		google.maps.event.addListener(marker, 'click', (function(marker) {
 			return function() {
 
 				//CONTROLLER.TRACKING.mapTracking(el);
-				console.log(marker);
-				console.log(i);
+				//console.log(marker);
+				//console.log(i);
 				
-				var mapDirectionUrl = "https://www.google.com/maps/dir/Current+Location/" + 
-				location.k +","+ location.D;
+				
 
 				infoWindow.setContent(
 					"<h6>" +
@@ -129,6 +136,7 @@ VIEW.MAP = (function(window){
 			calendarListEl.innerHTML = calendarListEl.innerHTML +
 			"<li id='calendar-list-" + i + "'><h6>" + data.summary + "</h6><p><strong>" + data.start.date + 
 			"</strong></p><p>" + data.location + "</p></li>";
+
 		}
 
 		geocoder = new google.maps.Geocoder();
