@@ -15,11 +15,10 @@ VIEW.MENU = (function(window){
 
 		for (i = 0; i < menuItems.length; i++) {
 			node.innerHTML = node.innerHTML +
-			'<div class="appetizer-module">' + 
+			'<div id="' + category + '-' + i + '" class="menu-module">' + 
 			'<img class="menu-image" src="/assets/images/menu/'+ category +'/' + menuItems[i].name + '.jpg"/><div class="module-text"><h3>' + 
 			menuItems[i].title + '</h3><p>' + menuItems[i].description + '</p></div></div>';
 		}
-
 	}
 
 	menu.appetizerTemplate = function() {
@@ -35,6 +34,11 @@ VIEW.MENU = (function(window){
 		menu.populateMenu(this.appetizerEl, appetizerMenu, 'appetizer');
 		menu.populateMenu(this.entreeEl, entreeMenu, 'entree');
 		menu.populateMenu(this.dessertEl, dessertMenu, 'dessert');
+
+		$('.menu-module').on('click', function(e) {
+			$('.menu-module').removeClass('selected-menu');
+			$(this).addClass('selected-menu');
+		})
 
 		//CONTROLLER.menu.appetizerInit();
 	}

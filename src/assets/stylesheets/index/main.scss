@@ -80,8 +80,9 @@
 		max-width: 1670px;
 		height: 100%;
 		margin: 0 auto;
+		position: relative;
 	}
-	.appetizer-module {
+	.menu-module {
 		background: rgb(50,50,50);
 		float: left;
 		position: relative;
@@ -109,13 +110,15 @@
 			padding: 10px 10px 0 10px;
 		}
 	}
+	.selected-menu {
+	}
 	&.section-dessert{
 		.menu-dessert {
 			@include medium {
 				width: 60%;
 				margin: 0 auto;
 			}
-			.appetizer-module {
+			.menu-module {
 				@include medium {
 					width: 33.3%;
 				}
