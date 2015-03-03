@@ -15,6 +15,7 @@ html, body{
 header {
 	@extend .bg-header;
 	@include tab-module;
+	@include transition-quad;
 	height: 200px;
 	//height: 170px;
 	z-index: 10;
@@ -22,6 +23,7 @@ header {
 		top: 0;
 	}
 	.logo-wannae {
+		@include transition-quad;
 		margin: 25px auto;
 		@include medium {
 			margin: 10px auto;
@@ -36,11 +38,15 @@ header {
 			margin: 10px 5px; 
 		}
 	}
+	.minimized & {
+		height: 140px;
+	}
 }
 
 nav {
 	@extend .bg-walls;
 	@include tab-module;
+	@include transition-quad;
 	height: 35px;
 	margin-top: -25px;
 	padding-top: 30px;
@@ -63,6 +69,9 @@ nav {
 	@include medium {
 		margin-top: 0;
 		top: 175px;
+		.minimized & {
+			top: 115px;
+		}
 	}
 }
 
@@ -73,7 +82,8 @@ nav {
 	overflow: hidden;
 	position: relative;
 	@include medium {
-		height: calc(100% - 285px);
+		height: calc(100% - 240px);
+		padding-bottom: 45px;
 	}
 }
 
@@ -105,9 +115,11 @@ footer {
 		height: 45px;
 	}
 	.footer-text {
-		float: left;
 		margin-top: 5px;
 		margin-left: 20px;
+		@include medium {
+			float: left;
+		}
 		&:last-child {
 			@include medium {
 				border-left: 1px solid rgba(150,150,150, 0.3);
