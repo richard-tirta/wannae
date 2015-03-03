@@ -9770,28 +9770,241 @@ CONFIG.MENU.DESSERT = [
 CONFIG.MENU.HERO = [
 	{
 		"id": 1,
+		"category": "entree",
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
 		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
+		"category": "entree",
 		"title": "Not So Stinky Garlic Noodle",
 		"name": "not-so-stinky-garlic-noodle",
 		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
 	},
 	{
 		"id": 3,
+		"category": "entree",
 		"title": "Shiitake Noodle Soup",
 		"name": "shiitake-noodle-soup",
 		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
 	},
 	{
 		"id": 4,
+		"category": "entree",
 		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
 		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
 	}
+];
+var CONFIG = CONFIG || {};
+
+CONFIG.LOCATION = CONFIG.LOCATION || {};
+
+CONFIG.LOCATION.EVENT = [
+	{
+		"id": 1,
+		"type": "event",
+		"title": "AKQA",
+		"address": "360 Third St, San Francisco 94103",
+		"telephone": "",
+		"email": "",
+		"web": "",
+		"latitude": 37.782547,
+		"longitude": -122.39789,
+		"description": "Description"
+	}
+];
+
+CONFIG.LOCATION.STYLE = [
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#aee2e0"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#abce83"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#769E72"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#7B8758"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#EBF4A4"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            },
+            {
+                "color": "#8dab68"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#5B5B3F"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#ABCE83"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#A4C67D"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#9BBF72"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#EBF4A4"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#87ae79"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f2200"
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            },
+            {
+                "visibility": "on"
+            },
+            {
+                "weight": 4.1
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#495421"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    }
 ];
 //	Note that Gruntfile is being setup so it loads vendor first, everything other than main.js and main.js at the very end.
 //  Therefore make sure you put your document.ready() or any initialization here 
@@ -9810,7 +10023,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();
-	//VIEW.MAP.init();
+	VIEW.MAP.init();
 
 });
 
@@ -10289,11 +10502,10 @@ VIEW.MENU = (function(window){
 
 		for (i = 0; i < menuItems.length; i++) {
 			node.innerHTML = node.innerHTML +
-			'<div class="appetizer-module">' + 
+			'<div id="' + category + '-' + i + '" class="menu-module">' + 
 			'<img class="menu-image" src="/assets/images/menu/'+ category +'/' + menuItems[i].name + '.jpg"/><div class="module-text"><h3>' + 
 			menuItems[i].title + '</h3><p>' + menuItems[i].description + '</p></div></div>';
 		}
-
 	}
 
 	menu.appetizerTemplate = function() {
@@ -10309,6 +10521,11 @@ VIEW.MENU = (function(window){
 		menu.populateMenu(this.appetizerEl, appetizerMenu, 'appetizer');
 		menu.populateMenu(this.entreeEl, entreeMenu, 'entree');
 		menu.populateMenu(this.dessertEl, dessertMenu, 'dessert');
+
+		$('.menu-module').on('click', function(e) {
+			$('.menu-module').removeClass('selected-menu');
+			$(this).addClass('selected-menu');
+		})
 
 		//CONTROLLER.menu.appetizerInit();
 	}
@@ -10372,5 +10589,221 @@ VIEW.SCROLL = (function(window){
 	}
 
 	return scroll;
+
+}(window));
+
+var VIEW = VIEW || {};
+
+VIEW.MAP = (function(window){
+
+	var map = {};
+
+	var apiKey = "AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8",
+		locationMap = undefined;
+
+	map.GMapInit = function(eventList, el, lat, lng, zoom) {
+		var eventList = eventList;
+
+		var mapElement = document.getElementById(el);
+
+		var mapOptions = {
+			center: new google.maps.LatLng(
+				lat,
+				lng
+			),
+			zoom: zoom,
+			zoomControl: false,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.DEFAULT,
+			},
+			disableDoubleClickZoom: true,
+			mapTypeControl: false,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+			},
+			scaleControl: true,
+			scrollwheel: true,
+			panControl: false,
+			streetViewControl: false,
+			draggable : true,
+			overviewMapControl: true,
+			overviewMapControlOptions: {
+				opened: false,
+			},
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			styles: CONFIG.LOCATION.STYLE
+		}
+
+		locationMap = new google.maps.Map(mapElement, mapOptions);
+		
+	}
+
+	map.populateMarkers = function(location, data, i) {
+		var infoWindow = new google.maps.InfoWindow({
+			pixelOffset: new google.maps.Size(-25, 0),
+			maxWidth: 160
+		});
+
+		var marker, i;
+		var icon1 = "./assets/images/icon-map-pointer.png",
+			icon2 = "./assets/images/icon-map-pointer-hover.png";
+
+		var mapDirectionUrl = "https://www.google.com/maps/dir/Current+Location/" + 
+				location.k +","+ location.D;
+
+		var markerIcon = {
+			url: icon1,
+			size: new google.maps.Size(96, 105),
+			origin: new google.maps.Point(0, 0),
+			anchor: new google.maps.Point(17, 34),
+			scaledSize: new google.maps.Size(50, 50)
+		};
+
+		marker = new google.maps.Marker({
+			icon: markerIcon,
+			position: location,
+			map: locationMap,
+			title: data.summary,
+			desc: data.description
+		});
+		link = '';
+
+		$("#calendar-list-" + i).on("mouseenter", function(e){
+			marker.setIcon(icon2);
+		});
+
+		$("#calendar-list-" + i).on("mouseleave", function(e){
+			marker.setIcon(icon1);
+		});
+
+
+		$("#calendar-list-" + i).on("click", function(e){
+			window.open(mapDirectionUrl, "_blank");
+		});
+
+		google.maps.event.addListener(marker, 'click', (function(marker) {
+			return function() {
+
+				//CONTROLLER.TRACKING.mapTracking(el);
+				//console.log(marker);
+				//console.log(i);
+				
+				
+
+				infoWindow.setContent(
+					"<h6>" +
+					data.summary + 
+					"</h6><p><strong>" +
+					data.start.date +
+					"</strong></p><p>"+ 
+					data.location +
+					"</p><a target='_blank' class='map-direction-link' href='" + 
+					mapDirectionUrl +
+					"'><p><strong>GET DIRECTIONS</strong></p></a>"
+				);
+				infoWindow.open(locationMap, marker);
+			}
+		})(marker));
+	}
+
+	map.populateCalendar = function(data) {
+
+		var geocoder,
+			calendarListEl = document.getElementById("calendar-list");
+
+		function geoCode(address, data, i) {
+
+			geocoder.geocode( { 'address': address}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+
+					map.populateMarkers(results[0].geometry.location, data, i)
+
+				} else {
+					console.log("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+
+		function updateCalendar(data, i) {
+			
+			calendarListEl.innerHTML = calendarListEl.innerHTML +
+			"<li id='calendar-list-" + i + "'><h6>" + data.summary + "</h6><p><strong>" + data.start.date + 
+			"</strong></p><p>" + data.location + "</p></li>";
+
+		}
+
+		geocoder = new google.maps.Geocoder();
+
+		for (i = 0; i < data.length; i++) {
+			//console.log(data[i]);
+			if(data[i].location) {
+				//console.log(data[i]);
+				//console.log(data[i].location);
+				updateCalendar(data[i], i);
+				geoCode(data[i].location, data[i], i);
+			}
+		}
+	}
+
+	map.calendarInit = function() {
+
+		var data = {},
+			calendarId = "tds609u4bfn63lk30cmlfdetjk@group.calendar.google.com",
+			url = "https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events";
+
+		data.key = apiKey;
+
+		console.log(data);
+
+		$.ajax({
+			type: "GET",
+			url: url,
+			data: data,
+			dataType: "json",
+			success: function(response){
+				//console.log(response);
+				//console.log(response.items)
+				map.populateCalendar(response.items);
+			}
+		});
+	}
+
+	map.onGMapReady = function() {
+
+		var latitude = 37.766237,
+			longitude = -122.44423,
+			zoom = 12;
+
+		map.GMapInit(
+			CONFIG.LOCATION.EVENT,
+			"location-map", 
+			latitude, 
+			longitude, 
+			zoom
+		);
+
+		map.calendarInit();
+	}
+
+	map.init = function() {
+
+		function loadGMapAPI() {
+
+			var script = document.createElement('script');
+
+			script.type = 'text/javascript';
+			
+			script.src = "https://maps.googleapis.com/maps/api/js?key=" + apiKey + 
+			"&sensor=false&extension=.js&callback=VIEW.MAP.onGMapReady";
+
+			document.body.appendChild(script);
+
+		}
+
+		window.onload = loadGMapAPI;
+
+	}
+
+	return map;
 
 }(window));

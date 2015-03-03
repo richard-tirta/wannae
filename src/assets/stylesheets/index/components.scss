@@ -77,6 +77,20 @@ nav {
 	}
 }
 
+.section-head {
+	border-top: 1px solid rgba(230,230,230,0.5);
+	border-bottom: 1px solid rgba(230,230,230,0.5);
+	color: rgb(230,230,230);
+	min-height: 40px;
+	height: 6%;
+	padding-top: 6%;
+	text-align: center;
+	@include medium {
+		//padding-top: 1%;
+		display: none;
+	}
+}
+
 footer {
 	@include clearfix;
 	@include tab-module;

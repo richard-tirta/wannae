@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	CONTROLLER.SCROLL.init();
 	//CONTROLLER.MAP.init();
 	//VIEW.MAIN.init();
-	//VIEW.MAP.init();
+	VIEW.MAP.init();
 
 });
 
