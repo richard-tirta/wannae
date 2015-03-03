@@ -9770,24 +9770,28 @@ CONFIG.MENU.DESSERT = [
 CONFIG.MENU.HERO = [
 	{
 		"id": 1,
+		"category": "entree",
 		"title": "Tea Leaf Salad",
 		"name": "tea-leaf-salad",
 		"description": "Traditional salad prepared fresh daily consists of pickled tea leaf with toasted sesame, fresh tomatoes, cabbage, chili, lime, garlic fried beans, and shrimp powder"
 	},
 	{
 		"id": 2,
+		"category": "entree",
 		"title": "Not So Stinky Garlic Noodle",
 		"name": "not-so-stinky-garlic-noodle",
 		"description": "Classic Mandalay style noodle with house prepared pork in soy sauce, garlic oil and topped with scallions"
 	},
 	{
 		"id": 3,
+		"category": "entree",
 		"title": "Shiitake Noodle Soup",
 		"name": "shiitake-noodle-soup",
 		"description": "Vegetarian Yunnan style rice noodle tossed fresh with Wanna-E sauce in bean soup"
 	},
 	{
 		"id": 4,
+		"category": "entree",
 		"title": "Golden Fried Rice w/ Pork&nbsp;Sung",
 		"name": "golden-fried-rice-w-pork-sung",
 		"description": "Simple yet tasty fried rice with white vatana beans. Served with a side of house made pork sung (Add egg+$1)"
@@ -10498,11 +10502,10 @@ VIEW.MENU = (function(window){
 
 		for (i = 0; i < menuItems.length; i++) {
 			node.innerHTML = node.innerHTML +
-			'<div class="appetizer-module">' + 
+			'<div id="' + category + '-' + i + '" class="menu-module">' + 
 			'<img class="menu-image" src="/assets/images/menu/'+ category +'/' + menuItems[i].name + '.jpg"/><div class="module-text"><h3>' + 
 			menuItems[i].title + '</h3><p>' + menuItems[i].description + '</p></div></div>';
 		}
-
 	}
 
 	menu.appetizerTemplate = function() {
@@ -10518,6 +10521,11 @@ VIEW.MENU = (function(window){
 		menu.populateMenu(this.appetizerEl, appetizerMenu, 'appetizer');
 		menu.populateMenu(this.entreeEl, entreeMenu, 'entree');
 		menu.populateMenu(this.dessertEl, dessertMenu, 'dessert');
+
+		$('.menu-module').on('click', function(e) {
+			$('.menu-module').removeClass('selected-menu');
+			$(this).addClass('selected-menu');
+		})
 
 		//CONTROLLER.menu.appetizerInit();
 	}
