@@ -16,6 +16,7 @@ CONTROLLER.SCROLL = (function(window){
 		lastTouchMoveY = undefined,
 		isTouchMoveDisabled = false;
 
+	this.headerEl = undefined;
 	this.navEl = undefined;
 	this.mainSection = undefined;
 	this.mainSectionLength = undefined;
@@ -193,6 +194,7 @@ CONTROLLER.SCROLL = (function(window){
 
 	scroll.init = function() {
 
+		this.headerEl = document.getElementById("header");
 		this.navEl = document.getElementById("nav");
 		this.mainSection = document.getElementsByClassName("section");
 		this.navButtons = document.getElementsByClassName("nav-buttons");

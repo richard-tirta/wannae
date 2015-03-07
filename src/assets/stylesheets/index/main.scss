@@ -2,6 +2,9 @@
 	width: 100%;
 	@include medium {
 		margin-top: 240px;
+		.minimized & {
+			margin-top: 180px;
+		}
 	}
 	.hero-slide {
 		width: 100%;
@@ -69,12 +72,11 @@
 .section-menu {
 	@include clearfix;
 	height: auto;
-	padding-bottom: 20px;
 	@include medium {
-		height: calc(100% - 285px);
+		height: calc(100% - 225px);
 	}
 	@include large {
-		height: calc(100% - 285px);
+		//height: calc(100% - 285px);
 	}
 	.menu-container {
 		max-width: 1670px;
@@ -132,7 +134,7 @@
 	height: auto;
 	@include medium {
 		height: 100%;
-		height: calc(100% - 240px);
+		height: calc(100% - 225px);
 	}
 	.calendar-container {
 		height: 100%;
@@ -144,13 +146,14 @@
 	}
 	.calendar-list {
 		width: 100%;
-		height: 50%;
+		height: 55%;
 		overflow: auto;
+		margin: 0;
 		li {
 			background: rgb(50,50,50);
 			cursor: pointer;
 			margin: 0;
-			padding: 10px 0 10px 20px;
+			padding: 15px 0 15px 20px;
 			position: relative;
 			&:nth-child(even) {
 				background: rgb(40,40,40);
@@ -186,9 +189,10 @@
 .section-about {
 	background: rgba(0,0,0,0.9);
 	min-height: 100%;
-	min-height: calc(100% - 240px);
 	height: auto;
-	padding-bottom: 50px;
+	@include medium {
+		min-height: calc(100% - 200px);
+	}
 	&:after {
 		background: image-url('hero/tea-leaf-salad-s.jpg');
 		background-repeat: no-repeat;
@@ -206,7 +210,7 @@
 		@include clearfix;
 		@include medium {
 			width: 700px;
-			margin: 2% auto;
+			margin: 5% auto;
 		} 
 	}
 	.description {

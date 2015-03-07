@@ -14,7 +14,9 @@ VIEW.SCROLL = (function(window){
 
 		if(index === 0) {
 			target = 0;
+			scroll.logoMini(false);
 		} else {
+			scroll.logoMini(true);
 			target = CONTROLLER.SCROLL.mainSection[index];
 		}
 
@@ -41,9 +43,13 @@ VIEW.SCROLL = (function(window){
 	scroll.logoMini = function(state){
 
 		if(state) {
-			CONTROLLER.SCROLL.navEl.className = "nav nav-minimized";
+			document.body.className = "minimized";
+			//CONTROLLER.SCROLL.navEl.className = "nav nav-minimized";
+			//CONTROLLER.SCROLL.headerEl.className = "header header-minimized";
 		} else if (!state) {
-			CONTROLLER.SCROLL.navEl.className = "nav";
+			document.body.className = "";
+			//CONTROLLER.SCROLL.navEl.className = "nav";
+			//CONTROLLER.SCROLL.headerEl.className = "header";
 		}
 		
 	}

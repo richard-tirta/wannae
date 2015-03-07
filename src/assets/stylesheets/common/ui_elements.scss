@@ -50,12 +50,18 @@ li {
 		background-repeat: no-repeat;
 		background-position: center center, bottom right, center center;
 		background-size: 700px 250px, 270px 170px, cover;
+		.minimized & {
+			background-size: 700px 250px, 200px 126px, cover;
+		}
 	}
 	@include large {
 		background-image: image-url('bg-birds.png'), image-url('img-palace.png'), image-url('header-bg-large.jpg');
 		background-repeat: no-repeat;
 		background-position: center center, bottom right, center center;
 		background-size: 700px 250px, 320px 201px, cover;
+		.minimized & {
+			background-size: 700px 250px, 230px 145px, cover;
+		}
 	}
 }
 
@@ -69,6 +75,12 @@ li {
 	@include background-icon('logo-wannae.png');
 	width: 150px;
 	height: 150px;
+	.minimized & {
+		background-position: center top;
+		background-size: 115px 115px;
+		width: 100px;
+		height: 100px;
+	}
 }
 
 .icon-fb {
