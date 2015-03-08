@@ -8,6 +8,41 @@ VIEW.MAP = (function(window){
 	var apiKey = "AIzaSyCYCvF5ysyzIWgMTt6bTYtm_LdqSb2xiR8",
 		locationMap = undefined;
 
+	map.timeFormat = function(start, end) {
+
+		var MMM = ["\x01", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var ddd = ["\x03", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+		function minuteFormat(i, len) { var s = i + ""; len = len || 2; while (s.length < len) s = "0" + s; return s; }
+
+		function hour12(value) {
+			var hour12 = value > 12 ? value - 12 : value == 0 ? 12 : value;
+			return hour12;
+		}
+
+		var space = " ";
+
+		var year = start.getFullYear();
+		var month = MMM[start.getMonth() + 1];
+		var date = start.getDate();
+
+		var day = ddd[start.getDay() + 1];
+
+		var startHour = hour12(start.getHours());
+		var endHour = hour12(end.getHours());
+
+		var startMinute = minuteFormat(start.getMinutes());
+		var endMinute = minuteFormat(end.getMinutes());
+
+		var start12 = start.getHours() < 12 ? "AM" : "PM";
+		var end12 = end.getHours() < 12 ? "AM" : "PM";
+
+		time = day + ", " + month + space + date + space + year + ", " + 
+		startHour + ":" + startMinute + start12 + " - " + endHour + ":" + endMinute + end12;
+
+		return time;
+	}
+
 	map.GMapInit = function(eventList, el, lat, lng, zoom) {
 		var eventList = eventList;
 
@@ -91,12 +126,6 @@ VIEW.MAP = (function(window){
 		google.maps.event.addListener(marker, 'click', (function(marker) {
 			return function() {
 
-				//CONTROLLER.TRACKING.mapTracking(el);
-				//console.log(marker);
-				//console.log(i);
-				
-				
-
 				infoWindow.setContent(
 					"<h6>" +
 					data.summary + 
@@ -118,6 +147,8 @@ VIEW.MAP = (function(window){
 		var geocoder,
 			calendarListEl = document.getElementById("calendar-list");
 
+		//console.log(data);
+
 		function geoCode(address, data, i) {
 
 			geocoder.geocode( { 'address': address}, function(results, status) {
@@ -131,10 +162,10 @@ VIEW.MAP = (function(window){
 			});
 		}
 
-		function updateCalendar(data, i) {
+		function updateCalendar(data, time,  i) {
 			
 			calendarListEl.innerHTML = calendarListEl.innerHTML +
-			"<li id='calendar-list-" + i + "'><h6>" + data.summary + "</h6><p><strong>" + data.start.date + 
+			"<li id='calendar-list-" + i + "'><h6>" + data.summary + "</h6><p><strong>" + time + 
 			"</strong></p><p>" + data.location + "</p></li>";
 
 		}
@@ -146,7 +177,17 @@ VIEW.MAP = (function(window){
 			if(data[i].location) {
 				//console.log(data[i]);
 				//console.log(data[i].location);
-				updateCalendar(data[i], i);
+
+				if (data[i].start.date) {
+					var time = data[i].start.date;
+				} else {
+					var start = new Date(data[i].start.dateTime);
+					var end = new Date(data[i].end.dateTime)
+					time = map.timeFormat(start, end);
+				}
+
+				//console.log(time);
+				updateCalendar(data[i], time, i);
 				geoCode(data[i].location, data[i], i);
 			}
 		}
@@ -160,7 +201,7 @@ VIEW.MAP = (function(window){
 
 		data.key = apiKey;
 
-		console.log(data);
+		//console.log(data);
 
 		$.ajax({
 			type: "GET",
