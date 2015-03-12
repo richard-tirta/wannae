@@ -30,6 +30,9 @@
 			padding: 10px 0 5px 20px;
 			width: 100%;
 			z-index: 10;
+			@include medium {
+				bottom: 90px;
+			}
 			p {
 				font-size: 12px;
 				width: 320px;

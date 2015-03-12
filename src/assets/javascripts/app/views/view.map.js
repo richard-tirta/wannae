@@ -80,7 +80,7 @@ VIEW.MAP = (function(window){
 		
 	}
 
-	map.populateMarkers = function(location, data, i) {
+	map.populateMarkers = function(location, data, time, i) {
 		var infoWindow = new google.maps.InfoWindow({
 			pixelOffset: new google.maps.Size(-25, 0),
 			maxWidth: 160
@@ -130,7 +130,7 @@ VIEW.MAP = (function(window){
 					"<h6>" +
 					data.summary + 
 					"</h6><p><strong>" +
-					data.start.date +
+					time +
 					"</strong></p><p>"+ 
 					data.location +
 					"</p><a target='_blank' class='map-direction-link' href='" + 
@@ -149,12 +149,12 @@ VIEW.MAP = (function(window){
 
 		//console.log(data);
 
-		function geoCode(address, data, i) {
+		function geoCode(address, data, time, i) {
 
 			geocoder.geocode( { 'address': address}, function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 
-					map.populateMarkers(results[0].geometry.location, data, i)
+					map.populateMarkers(results[0].geometry.location, data, time, i)
 
 				} else {
 					console.log("Geocode was not successful for the following reason: " + status);
@@ -188,7 +188,7 @@ VIEW.MAP = (function(window){
 
 				//console.log(time);
 				updateCalendar(data[i], time, i);
-				geoCode(data[i].location, data[i], i);
+				geoCode(data[i].location, data[i], time, i);
 			}
 		}
 	}
