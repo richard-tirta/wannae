@@ -196,7 +196,7 @@ VIEW.MAP = (function(window){
 	map.calendarInit = function() {
 
 		var data = {},
-			calendarId = "tds609u4bfn63lk30cmlfdetjk@group.calendar.google.com",
+			calendarId = "wannae2014@gmail.com",
 			url = "https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events";
 
 		data.key = apiKey;
